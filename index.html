@@ -261,13 +261,99 @@ th.cur-col{ color:var(--amber-600) !important; }
   .kpi-grid{ grid-template-columns:repeat(2,1fr);}
   .grid2, .grid3, .grid-auto{ grid-template-columns:1fr; }
 }
+
+/* ===== HAMBURGER (hidden on desktop) ===== */
+.hamburger{
+  display:none; align-items:center; justify-content:center;
+  width:36px; height:36px; border-radius:9px; border:1px solid var(--border);
+  background:#fff; box-shadow:var(--shadow-card); cursor:pointer; color:var(--navy-900); flex-shrink:0;
+}
+.hamburger svg{ width:18px;height:18px; }
+.topbar-left{ display:flex; align-items:center; gap:12px; min-width:0; }
+.sidebar-overlay{ display:none; }
+
+/* ===== MOBILE / TABLET RESPONSIVE ===== */
+@media (max-width: 860px){
+  .hamburger{ display:flex; }
+  .app{ display:block; }
+  .sidebar{
+    position:fixed; top:0; left:0; height:100vh; z-index:60;
+    width:250px; max-width:80vw;
+    transform:translateX(-100%);
+    transition:transform .25s ease;
+    box-shadow:0 0 40px rgba(0,0,0,0.35);
+  }
+  .sidebar.open{ transform:translateX(0); }
+  .sidebar-overlay{
+    display:block; position:fixed; inset:0; z-index:55;
+    background:rgba(10,16,26,0.45); opacity:0; pointer-events:none;
+    transition:opacity .2s ease;
+  }
+  .sidebar-overlay.open{ opacity:1; pointer-events:auto; }
+  .main{ width:100%; }
+
+  .topbar{ padding:12px 14px; gap:10px; flex-wrap:wrap; }
+  .topbar-title h1{ font-size:16.5px; }
+  .topbar-title p{ font-size:11px; }
+  .topbar-controls{ gap:8px; }
+  .badge-live{ padding:6px 9px; font-size:10px; }
+  .select-wrap select{ padding:8px 28px 8px 11px; font-size:12.3px; }
+
+  .page{ padding:16px 14px 46px; }
+  .section-head{ margin:20px 0 10px; flex-wrap:wrap; gap:4px; }
+  .section-head h2{ font-size:13.5px; }
+  .section-head .sub{ font-size:10.8px; }
+
+  .kpi-grid{ grid-template-columns:repeat(2,1fr); gap:10px; }
+  .kpi-card{ padding:13px 13px 12px; border-radius:12px; }
+  .kpi-label{ font-size:9.8px; }
+  .kpi-value{ font-size:19px; }
+  .kpi-icon{ width:22px;height:22px; }
+  .kpi-icon svg{ width:12px;height:12px; }
+  .kpi-sub{ font-size:10.3px; }
+
+  .grid2, .grid3, .grid-auto{ grid-template-columns:1fr; gap:10px; }
+  .chart-card{ padding:13px 13px 10px; border-radius:12px; }
+  [style*="height:290px"]{ height:230px !important; }
+  [style*="height:250px"]{ height:220px !important; }
+  [style*="height:230px"]{ height:200px !important; }
+  [style*="height:210px"]{ height:190px !important; }
+  [style*="height:200px"]{ height:185px !important; }
+
+  .comment-banner{ padding:12px 14px; border-radius:10px; }
+  .comment-banner .txt{ font-size:12.3px; }
+
+  .table-card .th-head{ padding:12px 13px 10px; flex-wrap:wrap; gap:4px; }
+  table{ font-size:11.3px; }
+  thead th{ padding:8px 10px; font-size:9.6px; }
+  tbody td{ padding:7px 10px; }
+
+  .insight-item{ padding:11px 13px; }
+  .insight-item .body p{ font-size:12.3px; }
+}
+
+@media (max-width: 480px){
+  .kpi-grid{ grid-template-columns:1fr; }
+  .topbar{ flex-direction:column; align-items:stretch; }
+  .topbar-controls{ justify-content:space-between; }
+  .select-wrap{ flex:1; }
+  .select-wrap select{ width:100%; }
+  .kpi-value{ font-size:22px; }
+  [style*="height:290px"]{ height:210px !important; }
+  [style*="height:250px"]{ height:200px !important; }
+  [style*="height:230px"]{ height:190px !important; }
+  [style*="height:210px"]{ height:180px !important; }
+  [style*="height:200px"]{ height:175px !important; }
+}
 </style>
 </head>
 <body>
 <div class="app">
 
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
   <!-- ============ SIDEBAR ============ -->
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar">
     <div class="brand">
       <div class="brand-mark">DS</div>
       <div class="brand-text">
@@ -309,9 +395,14 @@ th.cur-col{ color:var(--amber-600) !important; }
   <!-- ============ MAIN ============ -->
   <div class="main">
     <div class="topbar">
-      <div class="topbar-title">
-        <h1 id="pageTitle">MTD Overview</h1>
-        <p id="pageSub">Month performance vs. SPLM (Same Period Last Month)</p>
+      <div class="topbar-left">
+        <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+        <div class="topbar-title">
+          <h1 id="pageTitle">MTD Overview</h1>
+          <p id="pageSub">Month performance vs. SPLM (Same Period Last Month)</p>
+        </div>
       </div>
       <div class="topbar-controls">
         <span class="badge-live"><span class="pulse"></span> Actuals loaded</span>
@@ -417,8 +508,8 @@ th.cur-col{ color:var(--amber-600) !important; }
           <div class="chart-wrap" style="height:230px;"><canvas id="opexDonutChart"></canvas></div>
         </div>
         <div class="chart-card">
-          <div class="ch-head"><h3>GP Growth% vs OPEX Growth% Differential</h3><span class="ch-note">MoM growth gap, pp</span></div>
-          <div class="chart-wrap" style="height:230px;"><canvas id="gpOpexDiffChart"></canvas></div>
+          <div class="ch-head"><h3>FF Cost % of Sales Trend</h3><span class="ch-note">Sales (bar) vs FF Cost % of Sales (line)</span></div>
+          <div class="chart-wrap" style="height:230px;"><canvas id="ffCostTrendChart"></canvas></div>
         </div>
       </div>
 
@@ -628,6 +719,19 @@ monthSelect.addEventListener('change', e=>{
 });
 
 /* =========================================================
+   MOBILE SIDEBAR (hamburger drawer)
+========================================================= */
+const sidebarEl = document.getElementById('sidebar');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+function openSidebar(){ sidebarEl.classList.add('open'); sidebarOverlay.classList.add('open'); }
+function closeSidebar(){ sidebarEl.classList.remove('open'); sidebarOverlay.classList.remove('open'); }
+hamburgerBtn.addEventListener('click', ()=>{
+  sidebarEl.classList.contains('open') ? closeSidebar() : openSidebar();
+});
+sidebarOverlay.addEventListener('click', closeSidebar);
+
+/* =========================================================
    NAV / PAGE SWITCHING
 ========================================================= */
 document.querySelectorAll('.nav-item').forEach(item=>{
@@ -646,6 +750,7 @@ document.querySelectorAll('.nav-item').forEach(item=>{
     };
     document.getElementById('pageTitle').textContent = titles[page][0];
     document.getElementById('pageSub').textContent = titles[page][1];
+    closeSidebar();
   });
 });
 
@@ -930,17 +1035,22 @@ function renderOpexDonut(){
         tooltip:{ callbacks:{ label:(ctx)=>{ const total = ctx.dataset.data.reduce((a,b)=>a+b,0); const v = ctx.raw; return `${ctx.label}: ${fmt(v,2)} Mn (${fmt(v/total*100,1)}%)`; } } } } }
   });
 }
-function renderGpOpexDiff(){
-  destroy('gpopexdiff');
-  const diff = DATA.map(d=> (d.g.gross_profit===null||d.g.opex_total===null) ? null : d.g.gross_profit - d.g.opex_total);
-  charts.gpopexdiff = new Chart(document.getElementById('gpOpexDiffChart'), {
-    type:'bar',
-    data:{ labels:MONTHS, datasets:[{ data:diff, backgroundColor: diff.map(v=> v===null? COL.slateSoft : (v>=0?COL.green:COL.red)),
-      borderRadius:5, dataLabels:{ color:(v)=> v===null?COL.slate:(v>=0?COL.green:COL.red), formatter:(v)=> v===null?'':fmt(v,1)+'pp' } }]},
-    options:{ responsive:true, maintainAspectRatio:false, layout:{padding:{top:16,bottom:6}},
-      plugins:{legend:{display:false}, dataLabels:{display:true},
-        tooltip:{callbacks:{label:(ctx)=> ctx.raw===null?'No prior month base':`${fmt(ctx.raw,1)} pp`}}},
-      scales:{ x:{grid:{display:false}}, y:{...baseGrid(), ticks:{callback:v=>v+'pp'}} } }
+function renderFfCostTrend(){
+  destroy('ffcost');
+  charts.ffcost = new Chart(document.getElementById('ffCostTrendChart'), {
+    data:{ labels:MONTHS, datasets:[
+      { type:'bar', label:'Sales', data:DATA.map(d=>d.net_sales), backgroundColor:COL.navy, borderRadius:5, order:2, yAxisID:'y', maxBarThickness:38,
+        dataLabels:{ color:COL.navy, formatter:(v)=>fmt(v,1) } },
+      { type:'line', label:'FF Cost % of Sales', data:DATA.map(d=>pct(d.ff_pct)), borderColor:COL.red, backgroundColor:COL.red, tension:.35, borderWidth:2.4, pointRadius:3.5, pointBackgroundColor:COL.red, pointBorderColor:'#fff', pointBorderWidth:1.5, yAxisID:'y1', order:1,
+        dataLabels:{ color:COL.red, offset:11, formatter:(v)=>fmt(v,1)+'%' } }
+    ]},
+    options:{ responsive:true, maintainAspectRatio:false, layout:{padding:{top:18}},
+      plugins:{ legend:{display:true, position:'top', align:'end', labels:{boxWidth:9,boxHeight:9,usePointStyle:true,pointStyle:'rect', font:{size:10.5}}},
+        tooltip:{mode:'index', intersect:false}, dataLabels:{display:true} },
+      scales:{ x:{grid:{display:false}},
+        y:{...baseGrid(), position:'left', title:{display:true,text:'Sales (Mn Tk)',color:COL.tick,font:{size:10}}},
+        y1:{ position:'right', grid:{display:false}, ticks:{callback:v=>v+'%'}, title:{display:true,text:'FF Cost % of Sales',color:COL.tick,font:{size:10}} }
+      } }
   });
 }
 
@@ -1219,7 +1329,7 @@ function renderAll(){
   renderMktFixVar();
   renderFfFixVar();
   renderOpexDonut();
-  renderGpOpexDiff();
+  renderFfCostTrend();
   renderExpenseTable();
 
   renderPnlComment();
