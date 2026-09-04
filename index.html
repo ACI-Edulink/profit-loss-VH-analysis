@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Deli Stationery (VH) — P&amp;L Performance Dashboard</title>
+<title>ACI Edulink — Deli Stationery P&amp;L Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
@@ -81,13 +81,11 @@ h1,h2,h3,.display{ font-family:'Space Grotesk',sans-serif; letter-spacing:-0.01e
   padding:22px 16px;
 }
 .brand{ display:flex; align-items:center; gap:10px; padding:4px 8px 22px 8px; border-bottom:1px solid rgba(255,255,255,0.08); margin-bottom:18px;}
-.brand-mark{
-  width:36px;height:36px;border-radius:9px;
-  background: linear-gradient(135deg, var(--amber-500), var(--amber-600));
+.brand-logo{
+  width:38px;height:38px;border-radius:9px;overflow:hidden;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
-  font-family:'Space Grotesk',sans-serif; font-weight:700; color:var(--navy-950); font-size:15px;
-  flex-shrink:0;
 }
+.brand-logo svg{ width:38px;height:38px;border-radius:9px; }
 .brand-text .b1{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:14.5px; line-height:1.15; color:#fff;}
 .brand-text .b2{ font-size:10.5px; color:var(--slate-300); letter-spacing:0.04em; text-transform:uppercase; margin-top:2px;}
 
@@ -356,6 +354,100 @@ th.cur-col{ color:var(--amber-600) !important; }
   [style*="height:210px"]{ height:180px !important; }
   [style*="height:200px"]{ height:175px !important; }
 }
+
+/* ── Upload Panel ─────────────────────────────────── */
+.upload-panel-overlay{
+  position:fixed; inset:0; background:rgba(8,21,36,.55); z-index:900;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .25s;
+}
+.upload-panel-overlay.open{ opacity:1; pointer-events:all; }
+.upload-panel{
+  background:var(--card); border-radius:16px; padding:36px 40px 32px;
+  max-width:520px; width:90vw; box-shadow:0 24px 60px rgba(8,21,36,.22);
+  position:relative; transform:translateY(10px); transition:transform .25s;
+}
+.upload-panel-overlay.open .upload-panel{ transform:translateY(0); }
+.upload-panel h2{ font-size:18px; font-weight:700; color:var(--ink-900); margin-bottom:6px; }
+.upload-panel .up-sub{ font-size:13px; color:var(--ink-400); margin-bottom:24px; }
+.upload-drop{
+  border:2px dashed var(--border); border-radius:12px; padding:36px 24px;
+  text-align:center; cursor:pointer; transition:border-color .2s, background .2s;
+  background:var(--bg-alt);
+}
+.upload-drop:hover,.upload-drop.drag-over{
+  border-color:var(--navy-800); background:rgba(21,48,78,.04);
+}
+.upload-drop svg{ width:38px; height:38px; color:var(--slate-400); margin-bottom:10px; }
+.upload-drop p{ font-size:13.5px; color:var(--ink-600); }
+.upload-drop span{ font-size:12px; color:var(--ink-400); display:block; margin-top:4px; }
+.upload-drop input[type=file]{ display:none; }
+.upload-status{ margin-top:16px; font-size:13px; border-radius:8px; padding:10px 14px; display:none; }
+.upload-status.ok{ background:#e1f3ea; color:#238a5c; display:block; }
+.upload-status.err{ background:#fbe7e5; color:#c23b34; display:block; }
+.upload-status.loading{ background:var(--bg-alt); color:var(--ink-600); display:block; }
+.upload-actions{ margin-top:20px; display:flex; gap:10px; justify-content:flex-end; }
+.btn-upload-confirm{
+  background:var(--navy-800); color:#fff; border:none; border-radius:8px;
+  padding:9px 22px; font-size:13.5px; font-weight:600; cursor:pointer;
+  transition:background .15s; display:none;
+}
+.btn-upload-confirm:hover{ background:var(--navy-700); }
+.btn-upload-confirm.visible{ display:inline-flex; align-items:center; gap:6px; }
+.btn-cancel-upload{
+  background:transparent; color:var(--ink-600); border:1.5px solid var(--border);
+  border-radius:8px; padding:9px 18px; font-size:13.5px; font-weight:500; cursor:pointer;
+  transition:background .15s;
+}
+.btn-cancel-upload:hover{ background:var(--bg-alt); }
+.close-upload{ position:absolute; top:14px; right:16px; background:none; border:none;
+  cursor:pointer; color:var(--ink-400); padding:4px; }
+.close-upload:hover{ color:var(--ink-700); }
+.btn-update-data{
+  display:inline-flex; align-items:center; gap:7px; background:var(--navy-800);
+  color:#fff; border:none; border-radius:8px; padding:8px 16px;
+  font-size:13px; font-weight:600; cursor:pointer; transition:background .15s;
+  white-space:nowrap;
+}
+.btn-update-data:hover{ background:var(--navy-700); }
+.btn-update-data svg{ width:15px; height:15px; }
+.upload-schema{
+  margin-top:20px; background:var(--bg-alt); border-radius:8px; padding:12px 14px;
+  font-size:11.5px; color:var(--ink-600);
+}
+.upload-schema b{ color:var(--ink-900); display:block; margin-bottom:6px; }
+.upload-schema code{ background:rgba(21,48,78,.07); border-radius:4px; padding:1px 5px; font-size:11px; }
+
+
+/* ── P&L All-Months Table ──────────────────────────────── */
+#pnlTable{ font-size:11.5px; }
+#pnlTable th{ 
+  background:var(--navy-800); color:#fff; font-weight:600; 
+  font-size:10px; padding:7px 8px; white-space:nowrap; text-align:right;
+}
+#pnlTable th:first-child{ text-align:left; min-width:160px; position:sticky; left:0; z-index:2; background:var(--navy-800); }
+#pnlTable th.col-latest{ background:var(--navy-700); color:#FFE0A0; }
+#pnlTable th.col-month{ font-size:9.5px; font-weight:500; }
+#pnlTable td{ padding:5px 8px; text-align:right; border-bottom:1px solid var(--border-soft); white-space:nowrap; }
+#pnlTable td:first-child{ text-align:left; font-size:11.5px; position:sticky; left:0; z-index:1; background:var(--card); }
+#pnlTable tr.total-row td{ font-weight:700; }
+#pnlTable tr.total-row td:first-child{ font-weight:700; }
+#pnlTable tr.section{ background:var(--bg-alt); }
+#pnlTable tr.section td{ border-top:1.5px solid var(--border); }
+#pnlTable tr.sub td:first-child{ color:var(--ink-600); padding-left:18px; font-size:11px; }
+#pnlTable tr:hover td{ background:rgba(21,48,78,.03); }
+#pnlTable tr:hover td:first-child{ background:rgba(21,48,78,.03); }
+#pnlTable td.num-cell{ font-family:'JetBrains Mono','Courier New',monospace; font-size:11px; }
+#pnlTable td.num-cell.neg{ color:var(--red-500); }
+#pnlTable td.col-latest{ background:rgba(232,163,61,.06); font-weight:600; }
+#pnlTable td.col-latest.neg{ color:var(--red-500); }
+#pnlTable td.col-avg{ background:rgba(91,112,134,.06); }
+#pnlTable td.col-ytd{ background:rgba(33,145,136,.04); }
+#pnlTable .mom-pill{ font-size:9.5px; font-weight:700; padding:1px 5px; border-radius:4px; display:inline-block; }
+#pnlTable .mom-pill.up{ background:var(--green-100); color:var(--green-600); }
+#pnlTable .mom-pill.dn{ background:var(--red-100); color:var(--red-600); }
+#pnlTable .mom-pill.nt{ background:var(--bg-alt); color:var(--ink-400); }
+
 </style>
 </head>
 <body>
@@ -366,10 +458,15 @@ th.cur-col{ color:var(--amber-600) !important; }
   <!-- ============ SIDEBAR ============ -->
   <aside class="sidebar" id="sidebar">
     <div class="brand">
-      <div class="brand-mark">DS</div>
+      <div class="brand-logo">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100" height="100" rx="16" fill="#E8143C"/>
+          <text x="50" y="72" text-anchor="middle" font-family="'Inter','Arial',sans-serif" font-weight="900" font-size="52" fill="white" letter-spacing="-2">deli</text>
+        </svg>
+      </div>
       <div class="brand-text">
-        <div class="b1">Deli Stationery</div>
-        <div class="b2">VH · ACI Limited</div>
+        <div class="b1">ACI Edulink</div>
+        <div class="b2">VH · Deli Stationery</div>
       </div>
     </div>
     <nav class="nav">
@@ -397,7 +494,7 @@ th.cur-col{ color:var(--amber-600) !important; }
       </div>
     </nav>
     <div class="sidebar-foot">
-      <b>Period:</b> Nov'25 – Jul'26 (9 mo)<br>
+      <b>Period:</b> <span id='sidebarPeriod'>Nov'25 – Aug'26 (10 mo)</span><br>
       <b>Currency:</b> Million BDT (Tk)<br>
       <b>Basis:</b> vs SPLM (Same Period Last Month)
     </div>
@@ -416,9 +513,43 @@ th.cur-col{ color:var(--amber-600) !important; }
         </div>
       </div>
       <div class="topbar-controls">
-        <span class="badge-live"><span class="pulse"></span> Actuals loaded</span>
+        <span class="badge-live" id="dataStatusBadge"><span class="pulse"></span> Actuals loaded</span>
+        <button class="btn-update-data" id="openUploadBtn" title="Upload new Excel data file">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Update Data
+        </button>
         <div class="select-wrap">
           <select id="monthSelect"></select>
+        </div>
+      </div>
+
+      <!-- Upload Modal -->
+      <div class="upload-panel-overlay" id="uploadOverlay">
+        <div class="upload-panel" role="dialog" aria-modal="true" aria-label="Upload Excel Data">
+          <button class="close-upload" id="closeUploadBtn" aria-label="Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" width="20" height="20"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+          <h2>Update Dashboard Data</h2>
+          <p class="up-sub">Upload the Edulink Detailed P&amp;L Excel file — the dashboard re-renders automatically from the new data.</p>
+          <div class="upload-drop" id="uploadDrop">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="11" x2="12" y2="17"/><polyline points="9 14 12 11 15 14"/></svg>
+            <p>Click to choose or drag &amp; drop your Excel file</p>
+            <span>Supported: .xlsx — Edulink Detailed P&amp;L workbook</span>
+            <input type="file" id="xlsxFileInput" accept=".xlsx,.xls">
+          </div>
+          <div class="upload-status" id="uploadStatus"></div>
+          <div class="upload-schema">
+            <b>Expected file structure</b>
+            Workbook with a <code>P&amp;L Till Month</code> sheet. Rows: Net Sales(6), COGS(16), MKT Fixed(21), MKT Var(23), MKT Promo(25), FF Fixed(30), FF Var(32), Dist(38), Admin(40), Other Income(44), Fin Cost(47).<br>
+            Columns B–J = monthly actuals (Nov'25→Jul'26 or beyond). Month tabs named <code>Nov-25</code>, <code>Dec-25</code> … for individual P&amp;L details.
+          </div>
+          <div class="upload-actions">
+            <button class="btn-cancel-upload" id="cancelUploadBtn">Cancel</button>
+            <button class="btn-upload-confirm" id="confirmUploadBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
+              Apply &amp; Refresh
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -438,7 +569,7 @@ th.cur-col{ color:var(--amber-600) !important; }
         <div class="chart-wrap" style="height:290px;"><canvas id="waterfallChart"></canvas></div>
       </div>
 
-      <div class="section-head"><h2>Trends — 9 Month Rolling</h2><span class="sub">Nov'25 – Jul'26</span></div>
+      <div class="section-head"><h2>Trends — 9 Month Rolling</h2><span class="sub">Nov'25 – Aug'26</span></div>
       <div class="grid2">
         <div class="chart-card">
           <div class="ch-head"><h3>Net Sales Trend</h3><span class="ch-note">Mn Tk</span></div>
@@ -540,7 +671,7 @@ th.cur-col{ color:var(--amber-600) !important; }
       <div class="table-card">
         <div class="th-head">
           <h3 id="pnlTableTitle">Profit &amp; Loss Statement</h3>
-          <span class="ch-note">Actual · % of Sales · SPLM Actual · MoM Var% · YTD Actual · YTD % of Sales</span>
+          <span class="ch-note" id="pnlTableNote">All months · Latest Actual · % Sales · MoM Var% · YTD · YTD % · Avg</span>
         </div>
         <div class="scroll-x"><table id="pnlTable"></table></div>
       </div>
@@ -550,7 +681,7 @@ th.cur-col{ color:var(--amber-600) !important; }
     <section class="page" id="page-insights">
       <div class="comment-banner">
         <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.6 10.8c.5.4.8 1 .8 1.7v.5h5.6v-.5c0-.7.3-1.3.8-1.7A6 6 0 0012 3z"/></svg></div>
-        <div class="txt"><span class="tag">Auto-generated</span>Key observations computed directly from the 9-month actuals (Nov'25–Jul'26). Figures refresh automatically as the underlying P&amp;L data changes.</div>
+        <div class="txt"><span class="tag">Auto-generated</span><span id="insightsBannerTxt">Key observations computed from the actuals. Figures refresh automatically as the underlying P&amp;L data changes.</span></div>
       </div>
       <div class="section-head"><h2>What the numbers are telling us</h2><span class="sub">Ranked by relevance</span></div>
       <div class="insight-list" id="insightList"></div>
@@ -558,13 +689,12 @@ th.cur-col{ color:var(--amber-600) !important; }
       <div class="grid3" id="extremesGrid"></div>
     </section>
 
-    <div class="foot-note">Deli Stationery (VH) · P&amp;L Performance Dashboard · Data source: Company Excel (Nov'25–Jul'26 monthly P&amp;L) · All figures in Million BDT · Built for internal management review</div>
+    <div class="foot-note">ACI Edulink · Deli Stationery (VH) · P&amp;L Performance Dashboard · Data source: Company Excel · All figures in Million BDT · Built for internal management review</div>
   </div>
 </div>
 
 <script id="pnl-data" type="application/json">
-[{"net_sales": 26.552487, "cogs": 18.15, "gross_profit": 8.402487, "mkt_total": 0.229025, "mkt_fixed": 0.094, "mkt_variable": 0.060025, "mkt_promo": 0.075, "ff_total": 4.045473, "ff_fixed": 2.64898, "ff_variable": 1.396493, "distribution": 0.318172, "admin": 0.0, "opex_total": 4.59267, "other_income": 0.0, "operating_profit": 3.809818, "financing_cost": 0.4, "pbt_wppf": 3.409818, "wppf": 0.170491, "pbt": 3.239327, "tax": 0.745045, "pat": 2.494282, "month": "Nov-25"}, {"net_sales": 11.510293, "cogs": 7.69, "gross_profit": 3.820293, "mkt_total": 1.075479, "mkt_fixed": 0.154207, "mkt_variable": 0.103849, "mkt_promo": 0.817424, "ff_total": 4.595503, "ff_fixed": 3.251573, "ff_variable": 1.34393, "distribution": 0.995165, "admin": 0.0, "opex_total": 6.666147, "other_income": 0.0, "operating_profit": -2.845855, "financing_cost": 0.61, "pbt_wppf": -3.455855, "wppf": -0.172793, "pbt": -3.283062, "tax": -0.755104, "pat": -2.527958, "month": "Dec-25"}, {"net_sales": 27.53789, "cogs": 19.02, "gross_profit": 8.51789, "mkt_total": 1.529426, "mkt_fixed": 0.190235, "mkt_variable": 0.139173, "mkt_promo": 1.200019, "ff_total": 4.614113, "ff_fixed": 3.250663, "ff_variable": 1.36345, "distribution": 0.483471, "admin": 0.0, "opex_total": 6.62701, "other_income": 0.0, "operating_profit": 1.89088, "financing_cost": 0.72, "pbt_wppf": 1.17088, "wppf": 0.058544, "pbt": 1.112336, "tax": 0.255837, "pat": 0.856499, "month": "Jan-26"}, {"net_sales": 15.931034, "cogs": 10.48, "gross_profit": 5.451034, "mkt_total": 1.288631, "mkt_fixed": 0.186141, "mkt_variable": 0.01868, "mkt_promo": 1.08381, "ff_total": 5.925033, "ff_fixed": 3.502064, "ff_variable": 2.422969, "distribution": 0.680245, "admin": 0.0, "opex_total": 7.893909, "other_income": 0.0, "operating_profit": -2.442875, "financing_cost": 0.85, "pbt_wppf": -3.292875, "wppf": -0.164644, "pbt": -3.128232, "tax": -0.719493, "pat": -2.408738, "month": "Feb-26"}, {"net_sales": 13.209064, "cogs": 8.22, "gross_profit": 4.989064, "mkt_total": 1.459558, "mkt_fixed": 0.333257, "mkt_variable": 0.214639, "mkt_promo": 0.911663, "ff_total": 6.177902, "ff_fixed": 4.735073, "ff_variable": 1.442829, "distribution": 0.595267, "admin": 0.0, "opex_total": 8.232727, "other_income": 0.0, "operating_profit": -3.243663, "financing_cost": 0.89, "pbt_wppf": -4.133663, "wppf": -0.206683, "pbt": -3.92698, "tax": -0.903205, "pat": -3.023775, "month": "Mar-26"}, {"net_sales": 39.208178, "cogs": 26.0, "gross_profit": 13.208178, "mkt_total": 2.724927, "mkt_fixed": 0.262174, "mkt_variable": 1.005035, "mkt_promo": 1.457718, "ff_total": 5.724218, "ff_fixed": 3.463595, "ff_variable": 2.260623, "distribution": 0.704763, "admin": 0.0, "opex_total": 9.153908, "other_income": 0.0, "operating_profit": 4.05427, "financing_cost": 0.69, "pbt_wppf": 3.36427, "wppf": 0.168213, "pbt": 3.196056, "tax": 0.735093, "pat": 2.460963, "month": "Apr-26"}, {"net_sales": 19.822601, "cogs": 13.43, "gross_profit": 6.392601, "mkt_total": 1.837849, "mkt_fixed": 0.408623, "mkt_variable": 0.074103, "mkt_promo": 1.355123, "ff_total": 6.73741, "ff_fixed": 4.905643, "ff_variable": 1.831767, "distribution": 0.675553, "admin": 0.0, "opex_total": 9.250812, "other_income": 0.25, "operating_profit": -2.608211, "financing_cost": 0.87, "pbt_wppf": -3.478211, "wppf": -0.173911, "pbt": -3.304301, "tax": -0.759989, "pat": -2.544311, "month": "May-26"}, {"net_sales": 30.345735, "cogs": 20.92, "gross_profit": 9.425735, "mkt_total": 4.715092, "mkt_fixed": 0.464486, "mkt_variable": 0.300606, "mkt_promo": 3.95, "ff_total": 6.676309, "ff_fixed": 4.079191, "ff_variable": 2.597118, "distribution": 0.724351, "admin": 0.0, "opex_total": 12.115752, "other_income": 0.11, "operating_profit": -2.580017, "financing_cost": 0.58, "pbt_wppf": -3.160017, "wppf": -0.158001, "pbt": -3.002016, "tax": -0.690464, "pat": -2.311553, "month": "Jun-26"}, {"net_sales": 40.67, "cogs": 27.66, "gross_profit": 13.01, "mkt_total": 5.554, "mkt_fixed": 0.282, "mkt_variable": 0.202, "mkt_promo": 5.07, "ff_total": 7.692, "ff_fixed": 4.433, "ff_variable": 3.259, "distribution": 0.89, "admin": 0.0, "opex_total": 14.136, "other_income": 0.0, "operating_profit": -1.126, "financing_cost": 1.14, "pbt_wppf": -2.266, "wppf": -0.1133, "pbt": -2.1527, "tax": -0.495121, "pat": -1.657579, "month": "Jul-26"}]
-
+[{"net_sales": 26.552487, "cogs": 18.15, "gross_profit": 8.402487, "mkt_total": 0.229025, "mkt_fixed": 0.094, "mkt_variable": 0.060025, "mkt_promo": 0.075, "ff_total": 4.045473, "ff_fixed": 2.64898, "ff_variable": 1.396493, "distribution": 0.318172, "admin": 0.0, "opex_total": 4.59267, "other_income": 0.0, "operating_profit": 3.809818, "financing_cost": 0.4, "pbt_wppf": 3.409818, "wppf": 0.170491, "pbt": 3.239327, "tax": 0.745045, "pat": 2.494282, "month": "Nov-25"}, {"net_sales": 11.510293, "cogs": 7.69, "gross_profit": 3.820293, "mkt_total": 1.075479, "mkt_fixed": 0.154207, "mkt_variable": 0.103849, "mkt_promo": 0.817424, "ff_total": 4.595503, "ff_fixed": 3.251573, "ff_variable": 1.34393, "distribution": 0.995165, "admin": 0.0, "opex_total": 6.666147, "other_income": 0.0, "operating_profit": -2.845855, "financing_cost": 0.61, "pbt_wppf": -3.455855, "wppf": -0.172793, "pbt": -3.283062, "tax": -0.755104, "pat": -2.527958, "month": "Dec-25"}, {"net_sales": 27.53789, "cogs": 19.02, "gross_profit": 8.51789, "mkt_total": 1.529426, "mkt_fixed": 0.190235, "mkt_variable": 0.139173, "mkt_promo": 1.200019, "ff_total": 4.614113, "ff_fixed": 3.250663, "ff_variable": 1.36345, "distribution": 0.483471, "admin": 0.0, "opex_total": 6.62701, "other_income": 0.0, "operating_profit": 1.89088, "financing_cost": 0.72, "pbt_wppf": 1.17088, "wppf": 0.058544, "pbt": 1.112336, "tax": 0.255837, "pat": 0.856499, "month": "Jan-26"}, {"net_sales": 15.931034, "cogs": 10.48, "gross_profit": 5.451034, "mkt_total": 1.288631, "mkt_fixed": 0.186141, "mkt_variable": 0.01868, "mkt_promo": 1.08381, "ff_total": 5.925033, "ff_fixed": 3.502064, "ff_variable": 2.422969, "distribution": 0.680245, "admin": 0.0, "opex_total": 7.893909, "other_income": 0.0, "operating_profit": -2.442875, "financing_cost": 0.85, "pbt_wppf": -3.292875, "wppf": -0.164644, "pbt": -3.128232, "tax": -0.719493, "pat": -2.408738, "month": "Feb-26"}, {"net_sales": 13.209064, "cogs": 8.22, "gross_profit": 4.989064, "mkt_total": 1.459558, "mkt_fixed": 0.333257, "mkt_variable": 0.214639, "mkt_promo": 0.911663, "ff_total": 6.177902, "ff_fixed": 4.735073, "ff_variable": 1.442829, "distribution": 0.595267, "admin": 0.0, "opex_total": 8.232727, "other_income": 0.0, "operating_profit": -3.243663, "financing_cost": 0.89, "pbt_wppf": -4.133663, "wppf": -0.206683, "pbt": -3.92698, "tax": -0.903205, "pat": -3.023775, "month": "Mar-26"}, {"net_sales": 39.208178, "cogs": 26.0, "gross_profit": 13.208178, "mkt_total": 2.724927, "mkt_fixed": 0.262174, "mkt_variable": 1.005035, "mkt_promo": 1.457718, "ff_total": 5.724218, "ff_fixed": 3.463595, "ff_variable": 2.260623, "distribution": 0.704763, "admin": 0.0, "opex_total": 9.153908, "other_income": 0.0, "operating_profit": 4.05427, "financing_cost": 0.69, "pbt_wppf": 3.36427, "wppf": 0.168213, "pbt": 3.196056, "tax": 0.735093, "pat": 2.460963, "month": "Apr-26"}, {"net_sales": 19.822601, "cogs": 13.43, "gross_profit": 6.392601, "mkt_total": 1.837849, "mkt_fixed": 0.408623, "mkt_variable": 0.074103, "mkt_promo": 1.355123, "ff_total": 6.73741, "ff_fixed": 4.905643, "ff_variable": 1.831767, "distribution": 0.675553, "admin": 0.0, "opex_total": 9.250812, "other_income": 0.25, "operating_profit": -2.608211, "financing_cost": 0.87, "pbt_wppf": -3.478211, "wppf": -0.173911, "pbt": -3.304301, "tax": -0.759989, "pat": -2.544311, "month": "May-26"}, {"net_sales": 30.345735, "cogs": 20.92, "gross_profit": 9.425735, "mkt_total": 4.715092, "mkt_fixed": 0.464486, "mkt_variable": 0.300606, "mkt_promo": 3.95, "ff_total": 6.676309, "ff_fixed": 4.079191, "ff_variable": 2.597118, "distribution": 0.724351, "admin": 0.0, "opex_total": 12.115752, "other_income": 0.11, "operating_profit": -2.580017, "financing_cost": 0.58, "pbt_wppf": -3.160017, "wppf": -0.158001, "pbt": -3.002016, "tax": -0.690464, "pat": -2.311553, "month": "Jun-26"}, {"net_sales": 40.67, "cogs": 27.66, "gross_profit": 13.01, "mkt_total": 5.554, "mkt_fixed": 0.282, "mkt_variable": 0.202, "mkt_promo": 5.07, "ff_total": 7.692, "ff_fixed": 4.433, "ff_variable": 3.259, "distribution": 0.89, "admin": 0.0, "opex_total": 14.136, "other_income": 0.0, "operating_profit": -1.126, "financing_cost": 1.14, "pbt_wppf": -2.266, "wppf": -0.1133, "pbt": -2.1527, "tax": -0.495121, "pat": -1.657579, "month": "Jul-26"}, {"net_sales": 33.81, "cogs": 24.66, "gross_profit": 9.15, "mkt_total": 6.219, "mkt_fixed": 0.405, "mkt_variable": 0.244, "mkt_promo": 5.57, "ff_total": 11.134, "ff_fixed": 4.896, "ff_variable": 6.238, "distribution": 0.62, "admin": 0.0, "opex_total": 17.973, "other_income": 0.0, "operating_profit": -8.823, "financing_cost": 1.13, "pbt_wppf": -9.953, "wppf": -0.49765, "pbt": -9.45535, "tax": -2.1747305, "pat": -7.2806195, "month": "Aug-26"}]
 </script>
 
 <script>
@@ -850,9 +980,12 @@ function renderExpenseComment(){
     `Field Force remains the largest single cost pool at <b>${fmt(m.ff_total,2)} Mn Tk</b> (${fmt(pct(m.ff_pct),1)}% of sales), followed by Marketing at <b>${fmt(m.mkt_total,2)} Mn Tk</b> (${fmt(pct(m.mkt_pct),1)}% of sales).`;
 }
 function renderPnlComment(){
-  const m = DATA[selectedIdx];
+  // Banner always shows the LATEST month (last in DATA), regardless of selectedIdx
+  const li = DATA.length - 1;
+  const m  = DATA[li];
+  const p  = li > 0 ? DATA[li-1] : null;
   document.getElementById('pnlComment').innerHTML =
-    `<span class="tag">${m.month}</span>Deli Stationery (VH) has closed <b>${m.month}</b> with Net Sales of <b>Tk ${fmt(m.net_sales,2)} Million</b>${m.g.net_sales!==null?`, ${m.g.net_sales>=0?'up':'down'} <b class="${m.g.net_sales>=0?'c-green':'c-red'}">${fmt(Math.abs(m.g.net_sales),1)}%</b> SPLM`:''}. `+
+    `<span class="tag">${m.month}</span>Deli Stationery (VH) has closed <b>${m.month}</b> with Net Sales of <b>Tk ${fmt(m.net_sales,2)} Million</b>${(m.g&&m.g.net_sales!==null)?`, ${m.g.net_sales>=0?'up':'down'} <b class="${m.g.net_sales>=0?'c-green':'c-red'}">${fmt(Math.abs(m.g.net_sales),1)}%</b> SPLM`:''}. `+
     `PBT is <b class="${m.pbt>=0?'c-green':'c-red'}">${fmt(m.pbt,2)} Million Tk</b> and PAT is <b class="${m.pat>=0?'c-green':'c-red'}">${fmt(m.pat,2)} Million Tk</b>.`;
 }
 
@@ -1181,62 +1314,101 @@ function renderExpenseTable(){
    P&L STATEMENT TABLE
 ========================================================= */
 function renderPnlTable(){
-  const m = DATA[selectedIdx];
-  const p = selectedIdx>0 ? DATA[selectedIdx-1] : null;
-  const c = CUM[selectedIdx];
-  document.getElementById('pnlTableTitle').textContent = `Profit & Loss Statement — ${m.month}`;
+  // Latest month is always the last entry; it stays fixed in the "latest" columns
+  const latestIdx = DATA.length - 1;
+  const mL = DATA[latestIdx];                          // latest month (fixed highlight)
+  const mLPrev = latestIdx>0 ? DATA[latestIdx-1] : null; // SPLM of latest
+  const cL = CUM[latestIdx];                           // YTD through latest
+
+  document.getElementById('pnlTableTitle').textContent =
+    `Profit & Loss Statement — All Months`;
 
   const rows = [
-    {label:'Net Sales', key:'net_sales', bold:true},
-    {label:'Total COGS', key:'cogs'},
-    {label:'Gross Profit', key:'gross_profit', bold:true, section:true},
-    {label:'Total Marketing Expenses', key:'mkt_total'},
-    {label:'· Fixed', key:'mkt_fixed', sub:true},
-    {label:'· Variable', key:'mkt_variable', sub:true},
-    {label:'· Promotion', key:'mkt_promo', sub:true},
-    {label:'Total Field Force Expenses', key:'ff_total'},
-    {label:'· Fixed', key:'ff_fixed', sub:true},
-    {label:'· Variable', key:'ff_variable', sub:true},
-    {label:'Distribution Expenses', key:'distribution'},
+    {label:'Net Sales',               key:'net_sales',        bold:true},
+    {label:'Total COGS',              key:'cogs'},
+    {label:'Gross Profit',            key:'gross_profit',     bold:true, section:true},
+    {label:'Total Marketing Expenses',key:'mkt_total'},
+    {label:'· Fixed',                 key:'mkt_fixed',        sub:true},
+    {label:'· Variable',              key:'mkt_variable',     sub:true},
+    {label:'· Promotion',             key:'mkt_promo',        sub:true},
+    {label:'Total Field Force Expenses',key:'ff_total'},
+    {label:'· Fixed',                 key:'ff_fixed',         sub:true},
+    {label:'· Variable',              key:'ff_variable',      sub:true},
+    {label:'Distribution Expenses',   key:'distribution'},
     {label:'Administration Expenses', key:'admin'},
-    {label:'Total Operating Expenses', key:'opex_total', bold:true, section:true},
-    {label:'Other Income', key:'other_income'},
-    {label:'Operating Profit', key:'operating_profit', bold:true, section:true},
-    {label:'Financing Cost', key:'financing_cost'},
-    {label:'Profit Before WPPF & Tax', key:'pbt_wppf', bold:true},
-    {label:'WPPF', key:'wppf'},
-    {label:'Profit Before Tax', key:'pbt', bold:true, section:true},
-    {label:'Tax', key:'tax'},
-    {label:'Profit After Tax', key:'pat', bold:true, section:true},
+    {label:'Total Operating Expenses',key:'opex_total',       bold:true, section:true},
+    {label:'Other Income',            key:'other_income'},
+    {label:'Operating Profit',        key:'operating_profit', bold:true, section:true},
+    {label:'Financing Cost',          key:'financing_cost'},
+    {label:'Profit Before WPPF & Tax',key:'pbt_wppf',         bold:true},
+    {label:'WPPF',                    key:'wppf'},
+    {label:'Profit Before Tax',       key:'pbt',              bold:true, section:true},
+    {label:'Tax',                     key:'tax'},
+    {label:'Profit After Tax',        key:'pat',              bold:true, section:true},
   ];
 
-  let head = `<thead><tr>
-    <th>Particulars</th>
-    <th class="cur-col">${m.month} Actual</th>
-    <th class="cur-col">% of Sales</th>
-    <th>${p?p.month:'SPLM'} Actual</th>
-    <th>MoM Var%</th>
-    <th>YTD Actual</th>
-    <th>YTD % of Sales</th>
-  </tr></thead>`;
+  // — helper: format num with neg class
+  function nc(v, dp=2, cls=''){
+    if(v===null||v===undefined) return '<td class="num-cell '+(cls||'')+' —">—</td>';
+    return `<td class="num-cell ${v<0?'neg':''} ${cls}">${fmt(v,dp)}</td>`;
+  }
+  function pctCell(v, ns, cls=''){
+    const r = safeDiv(v, ns);
+    if(r===null) return `<td class="num-cell ${cls}">—%</td>`;
+    return `<td class="num-cell ${r<0?'neg':''} ${cls}">${fmt(pct(r),1)}%</td>`;
+  }
+  function momCell(cur, prev){
+    if(prev===null||prev===undefined) return '<td class="num-cell">—</td>';
+    const g = growth(cur, prev);
+    if(g===null) return '<td class="num-cell">—</td>';
+    // invert "good" for cost lines: lower is good
+    const cls = g>=0 ? 'up' : 'dn';
+    return `<td class="num-cell"><span class="mom-pill ${cls}">${g>=0?'+':''}${fmt(g,1)}%</span></td>`;
+  }
+
+  // Build header: Particulars | all months... | Latest Actual | % Sales | MoM% | YTD | YTD% | Avg
+  let head = '<thead><tr><th>Particulars</th>';
+  DATA.forEach((d,i)=>{
+    const isLast = (i === latestIdx);
+    head += `<th class="col-month${isLast?' col-latest':''}">${d.month}</th>`;
+  });
+  head += `<th class="col-latest">% Sales</th>`;
+  head += `<th>MoM Var%</th>`;
+  head += `<th class="col-ytd">YTD Actual</th>`;
+  head += `<th class="col-ytd">YTD %</th>`;
+  head += `<th class="col-avg">Avg/Mo</th>`;
+  head += '</tr></thead>';
+
   let body = '<tbody>';
   rows.forEach(r=>{
-    const val = m[r.key];
-    const pval = p ? p[r.key] : null;
-    const cval = c[r.key];
-    const pctSales = safeDiv(val, m.net_sales);
-    const cPctSales = safeDiv(cval, c.net_sales);
-    const mom = pval!==null && pval!==undefined ? growth(val, pval) : null;
-    const trCls = r.bold ? 'total-row' : (r.sub ? 'sub' : '');
-    body += `<tr class="${trCls}${r.section?' section':''}">
-      <td>${r.label}</td>
-      <td class="num-cell cur-col ${val<0?'neg':''}">${fmt(val,2)}</td>
-      <td class="num-cell cur-col">${pctSales===null?'—':fmt(pct(pctSales),1)+'%'}</td>
-      <td class="num-cell">${pval===null||pval===undefined?'—':fmt(pval,2)}</td>
-      <td class="num-cell">${mom===null?'—':`<span class="mini-pill ${mom>=0?'up':'down'}">${mom>=0?'+':''}${fmt(mom,1)}%</span>`}</td>
-      <td class="num-cell">${cval===undefined?'—':fmt(cval,2)}</td>
-      <td class="num-cell">${cPctSales===null?'—':fmt(pct(cPctSales),1)+'%'}</td>
-    </tr>`;
+    const trCls = (r.bold?'total-row':'') + (r.sub?' sub':'') + (r.section?' section':'');
+    body += `<tr class="${trCls}"><td>${r.label}</td>`;
+
+    // All monthly actuals
+    DATA.forEach((d,i)=>{
+      const v = d[r.key];
+      const isLast = (i === latestIdx);
+      body += `<td class="num-cell ${v<0?'neg':''} ${isLast?'col-latest':''}">${fmt(v,2)}</td>`;
+    });
+
+    // Latest % of Sales
+    body += pctCell(mL[r.key], mL.net_sales, 'col-latest');
+
+    // MoM Var% (latest vs SPLM)
+    body += momCell(mL[r.key], mLPrev?mLPrev[r.key]:null);
+
+    // YTD Actual
+    const cval = cL[r.key];
+    body += `<td class="num-cell ${cval<0?'neg':''} col-ytd">${fmt(cval,2)}</td>`;
+
+    // YTD % of Sales
+    body += pctCell(cval, cL.net_sales, 'col-ytd');
+
+    // Avg per month
+    const avg = cval / DATA.length;
+    body += `<td class="num-cell ${avg<0?'neg':''} col-avg">${fmt(avg,2)}</td>`;
+
+    body += '</tr>';
   });
   body += '</tbody>';
   document.getElementById('pnlTable').innerHTML = head+body;
@@ -1349,6 +1521,297 @@ function renderAll(){
   renderInsights();
 }
 renderAll();
+
+/* =========================================================
+   XLSX UPLOAD & LIVE DATA RELOAD
+   Uses SheetJS (cdn.sheetjs.com) for in-browser Excel parsing.
+   Reads "P&L Till Month" and individual month tabs to rebuild
+   the DATA array that drives the entire dashboard.
+========================================================= */
+(function(){
+
+/* ── SheetJS loader ─────────────────────────────────── */
+function loadSheetJS(cb){
+  if(window.XLSX){ cb(); return; }
+  const s = document.createElement('script');
+  s.src = 'https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js';
+  s.onload = cb;
+  s.onerror = ()=>{ setStatus('err','Failed to load Excel parser. Check your internet connection.'); };
+  document.head.appendChild(s);
+}
+
+/* ── Modal controls ─────────────────────────────────── */
+const overlay     = document.getElementById('uploadOverlay');
+const openBtn     = document.getElementById('openUploadBtn');
+const closeBtn    = document.getElementById('closeUploadBtn');
+const cancelBtn   = document.getElementById('cancelUploadBtn');
+const confirmBtn  = document.getElementById('confirmUploadBtn');
+const dropZone    = document.getElementById('uploadDrop');
+const fileInput   = document.getElementById('xlsxFileInput');
+const statusEl    = document.getElementById('uploadStatus');
+const badgeEl     = document.getElementById('dataStatusBadge');
+
+let pendingData = null;
+
+function openModal(){ overlay.classList.add('open'); pendingData=null; confirmBtn.classList.remove('visible'); setStatus('',''); }
+function closeModal(){ overlay.classList.remove('open'); }
+
+openBtn.addEventListener('click', openModal);
+closeBtn.addEventListener('click', closeModal);
+cancelBtn.addEventListener('click', closeModal);
+overlay.addEventListener('click', e=>{ if(e.target===overlay) closeModal(); });
+
+function setStatus(type, msg){
+  statusEl.className = 'upload-status' + (type ? ' '+type : '');
+  statusEl.textContent = msg;
+}
+
+/* ── Drag & drop ────────────────────────────────────── */
+dropZone.addEventListener('click', ()=> fileInput.click());
+dropZone.addEventListener('dragover', e=>{ e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', ()=> dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e=>{
+  e.preventDefault(); dropZone.classList.remove('drag-over');
+  const f = e.dataTransfer.files[0];
+  if(f) handleFile(f);
+});
+fileInput.addEventListener('change', ()=>{
+  if(fileInput.files[0]) handleFile(fileInput.files[0]);
+});
+
+/* ── File reading & parsing ─────────────────────────── */
+function handleFile(file){
+  if(!/\.xlsx?$/i.test(file.name)){
+    setStatus('err','Please upload an .xlsx or .xls Excel file.');
+    return;
+  }
+  setStatus('loading','Reading "' + file.name + '" …');
+  confirmBtn.classList.remove('visible');
+  loadSheetJS(()=>{
+    const reader = new FileReader();
+    reader.onload = e => parseWorkbook(e.target.result, file.name);
+    reader.onerror = ()=> setStatus('err','Could not read file.');
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+function parseWorkbook(ab, fname){
+  try{
+    const wb = XLSX.read(ab, {type:'arraybuffer', cellDates:true});
+    const parsed = extractData(wb);
+    if(!parsed || parsed.length === 0){
+      setStatus('err','Could not find expected data in this workbook. Make sure it contains a "P&L Till Month" sheet with the correct structure.');
+      return;
+    }
+    pendingData = parsed;
+    setStatus('ok', '✓ Parsed ' + parsed.length + ' months from "' + fname + '". Click "Apply & Refresh" to update the dashboard.');
+    confirmBtn.classList.add('visible');
+  } catch(err){
+    setStatus('err','Parse error: ' + err.message);
+  }
+}
+
+/* ── Core extraction from workbook ──────────────────── */
+function cellVal(ws, r, c){
+  // r,c are 0-indexed
+  const addr = XLSX.utils.encode_cell({r,c});
+  const cell = ws[addr];
+  if(!cell) return 0;
+  const v = cell.v;
+  return (typeof v === 'number') ? v : 0;
+}
+
+function extractData(wb){
+  // ── Try "P&L Till Month" for the monthly grid ──
+  const sheetName = wb.SheetNames.find(n => /p&l.*till|till.*month/i.test(n));
+  if(!sheetName){
+    throw new Error('Sheet "P&L Till Month" not found. Available sheets: ' + wb.SheetNames.join(', '));
+  }
+  const ws = wb.Sheets[sheetName];
+
+  // Row 4 (0-indexed: 3) contains month headers in cols B onward (1..)
+  // Row 6 (idx 5) = net_sales, etc.  All 0-indexed here.
+  // We detect how many months by reading row 4 until empty
+  const headerRow = 3; // row 4 in Excel = index 3
+  const monthNames = [];
+  for(let c = 1; c <= 20; c++){
+    const addr = XLSX.utils.encode_cell({r: headerRow, c});
+    const cell = ws[addr];
+    if(!cell || !cell.v) break;
+    const v = String(cell.v).trim();
+    // Stop at cumulative columns
+    if(/cumul/i.test(v) || /budget/i.test(v) || /sply/i.test(v)) break;
+    monthNames.push(v);
+  }
+  if(monthNames.length === 0) throw new Error('No month columns found in row 4 of "' + sheetName + '".');
+
+  const R = {
+    net_sales:   5,  // row 6 -> idx 5
+    cogs:        15, // row 16
+    // gross_profit derived
+    mkt_fixed:   20, // row 21
+    mkt_variable:22, // row 23
+    mkt_promo:   24, // row 25
+    // mkt_total derived
+    ff_fixed:    29, // row 30
+    ff_variable: 31, // row 32
+    // ff_total derived
+    distribution:37, // row 38
+    admin:       39, // row 40
+    // opex_total derived
+    other_income:43, // row 44
+    // op_profit derived
+    financing_cost:46, // row 47
+    // pbt_wppf, wppf, pbt, tax, pat derived
+  };
+
+  const result = [];
+  monthNames.forEach((month, ci) => {
+    const c = ci + 1; // col B = 1
+    const ns  = cellVal(ws, R.net_sales,   c);
+    const cogs = cellVal(ws, R.cogs,       c);
+    const mf  = cellVal(ws, R.mkt_fixed,   c);
+    const mv  = cellVal(ws, R.mkt_variable,c);
+    const mp  = cellVal(ws, R.mkt_promo,   c);
+    const ff  = cellVal(ws, R.ff_fixed,    c);
+    const fv  = cellVal(ws, R.ff_variable, c);
+    const di  = cellVal(ws, R.distribution,c);
+    const ad  = cellVal(ws, R.admin,       c);
+    const oi  = cellVal(ws, R.other_income,c);
+    const fc  = cellVal(ws, R.financing_cost,c);
+
+    const gp   = ns - cogs;
+    const mt   = mf + mv + mp;
+    const fft  = ff + fv;
+    const opex = mt + fft + di + ad;
+    const op   = gp - opex + oi;
+    const pbw  = op - fc;
+    const wppf = pbw * 0.05;
+    const pbt  = pbw - wppf;
+    const tax  = pbt * 0.23;
+    const pat  = pbt - tax;
+
+    result.push({
+      month, net_sales:ns, cogs, gross_profit:gp,
+      mkt_total:mt, mkt_fixed:mf, mkt_variable:mv, mkt_promo:mp,
+      ff_total:fft, ff_fixed:ff, ff_variable:fv,
+      distribution:di, admin:ad, opex_total:opex, other_income:oi,
+      operating_profit:op, financing_cost:fc,
+      pbt_wppf:pbw, wppf, pbt, tax, pat
+    });
+  });
+  return result;
+}
+
+/* ── Apply data and re-render ───────────────────────── */
+confirmBtn.addEventListener('click', ()=>{
+  if(!pendingData) return;
+
+  // Replace global DATA in place (preserves all references in functions)
+  DATA.length = 0;
+  pendingData.forEach(d => DATA.push(d));
+
+  // Recompute derived fields
+  DATA.forEach(m=>{
+    m.gp_pct       = safeDiv(m.gross_profit, m.net_sales);
+    m.cogs_pct     = safeDiv(m.cogs, m.net_sales);
+    m.mkt_pct      = safeDiv(m.mkt_total, m.net_sales);
+    m.ff_pct       = safeDiv(m.ff_total, m.net_sales);
+    m.dist_pct     = safeDiv(m.distribution, m.net_sales);
+    m.admin_pct    = safeDiv(m.admin, m.net_sales);
+    m.opex_pct     = safeDiv(m.opex_total, m.net_sales);
+    m.op_pct       = safeDiv(m.operating_profit, m.net_sales);
+    m.pbt_pct      = safeDiv(m.pbt, m.net_sales);
+    m.pat_pct      = safeDiv(m.pat, m.net_sales);
+    m.fin_pct      = safeDiv(m.financing_cost, m.net_sales);
+    m.mkt_fixed_share = safeDiv(m.mkt_fixed, (m.mkt_fixed+m.mkt_variable));
+    m.ff_fixed_share  = safeDiv(m.ff_fixed,  (m.ff_fixed +m.ff_variable));
+  });
+  DATA.forEach((m,i)=>{
+    const p = i>0 ? DATA[i-1] : null;
+    m.g = {};
+    ['net_sales','cogs','gross_profit','mkt_total','ff_total','distribution',
+     'opex_total','operating_profit','pbt','pat','financing_cost'].forEach(k=>{
+      m.g[k] = p ? growth(m[k], p[k]) : null;
+    });
+    m.gp_pct_pp   = p ? pct(m.gp_pct - p.gp_pct) : null;
+    m.opex_pct_pp = p ? pct(m.opex_pct - p.opex_pct) : null;
+  });
+
+  // Rebuild CUM
+  CUM.length = 0;
+  (function(){
+    let run = {net_sales:0,cogs:0,gross_profit:0,mkt_total:0,ff_total:0,
+               distribution:0,admin:0,opex_total:0,other_income:0,
+               operating_profit:0,financing_cost:0,pbt_wppf:0,wppf:0,pbt:0,tax:0,pat:0};
+    DATA.forEach((m,i)=>{
+      Object.keys(run).forEach(k=> run[k]+= (m[k]||0));
+      const snap = Object.assign({}, run);
+      snap.month = m.month;
+      snap.gp_pct  = safeDiv(snap.gross_profit, snap.net_sales);
+      snap.opex_pct= safeDiv(snap.opex_total, snap.net_sales);
+      snap.op_pct  = safeDiv(snap.operating_profit, snap.net_sales);
+      snap.pbt_pct = safeDiv(snap.pbt, snap.net_sales);
+      snap.pat_pct = safeDiv(snap.pat, snap.net_sales);
+      snap.avg_months = i+1;
+      CUM.push(snap);
+    });
+  })();
+
+  // Rebuild MONTHS array
+  MONTHS.length = 0;
+  DATA.forEach(d => MONTHS.push(d.month));
+
+  // Rebuild month dropdown
+  monthSelect.innerHTML = '';
+  selectedIdx = DATA.length - 1;
+  MONTHS.forEach((m,i)=>{
+    const opt = document.createElement('option');
+    opt.value = i; opt.textContent = m;
+    if(i===selectedIdx) opt.selected = true;
+    monthSelect.appendChild(opt);
+  });
+
+  // Destroy all existing charts so they rebuild cleanly
+  Object.keys(charts).forEach(k=>{
+    if(charts[k] && typeof charts[k].destroy === 'function'){
+      charts[k].destroy();
+      delete charts[k];
+    }
+  });
+
+  // Refresh badge
+  const lastMonth = DATA[DATA.length-1].month;
+  badgeEl.innerHTML = '<span class="pulse"></span> ' + lastMonth + ' actuals loaded';
+
+  // Update sidebar period
+  const spEl = document.getElementById('sidebarPeriod');
+  if(spEl){ 
+    const firstM2 = DATA[0] ? DATA[0].month : "Nov'25";
+    spEl.textContent = firstM2 + ' – ' + lastMonth + ' (' + DATA.length + ' mo)';
+  }
+
+  // Update page subtitle trend labels
+  const firstM = DATA[0] ? DATA[0].month : 'Nov\'25';
+  const lastM  = lastMonth;
+  document.querySelectorAll('.sub').forEach(el=>{
+    if(el.textContent.match(/Nov'?25.*Jul'?26|Rolling/)){
+      el.textContent = firstM + ' – ' + lastM;
+    }
+  });
+
+  // Update footer note
+  const foot = document.querySelector('.foot-note');
+  if(foot) foot.textContent = foot.textContent.replace(/\(.*?\)/g, '(' + firstM + '–' + lastM + ' monthly P&L)');
+
+  closeModal();
+
+  // Small delay so modal closes before heavy re-render
+  setTimeout(()=>{ renderAll(); }, 80);
+});
+
+})();
+
 </script>
 </body>
 </html>
