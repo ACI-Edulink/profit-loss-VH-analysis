@@ -419,34 +419,22 @@ th.cur-col{ color:var(--amber-600) !important; }
 .upload-schema code{ background:rgba(21,48,78,.07); border-radius:4px; padding:1px 5px; font-size:11px; }
 
 
-/* ── P&L All-Months Table ──────────────────────────────── */
-#pnlTable{ font-size:11.5px; }
-#pnlTable th{ 
-  background:var(--navy-800); color:#fff; font-weight:600; 
-  font-size:10px; padding:7px 8px; white-space:nowrap; text-align:right;
+/* ── P&L All-Months: piggyback on global table CSS, minimal delta ── */
+#pnlTable thead th{ min-width:56px; }
+#pnlTable thead th:first-child{ min-width:170px; }
+#pnlTable td.cur-col{ background:#FEF7EA !important; }
+#pnlTable th.cur-col{ background:#FEF7EA !important; color:var(--amber-600) !important; }
+#pnlTable td.col-avg{ background:rgba(91,112,134,.05) !important; }
+#pnlTable td.col-ytd{ background:rgba(33,145,136,.04) !important; }
+#pnlTable td.neg{ color:var(--red-600) !important; font-weight:600; }
+#pnlTable tbody tr.section-bold td{ 
+  font-weight:700; color:var(--ink-900); background:var(--bg-alt); 
+  border-top:1.5px solid var(--border); 
 }
-#pnlTable th:first-child{ text-align:left; min-width:160px; position:sticky; left:0; z-index:2; background:var(--navy-800); }
-#pnlTable th.col-latest{ background:var(--navy-700); color:#FFE0A0; }
-#pnlTable th.col-month{ font-size:9.5px; font-weight:500; }
-#pnlTable td{ padding:5px 8px; text-align:right; border-bottom:1px solid var(--border-soft); white-space:nowrap; }
-#pnlTable td:first-child{ text-align:left; font-size:11.5px; position:sticky; left:0; z-index:1; background:var(--card); }
-#pnlTable tr.total-row td{ font-weight:700; }
-#pnlTable tr.total-row td:first-child{ font-weight:700; }
-#pnlTable tr.section{ background:var(--bg-alt); }
-#pnlTable tr.section td{ border-top:1.5px solid var(--border); }
-#pnlTable tr.sub td:first-child{ color:var(--ink-600); padding-left:18px; font-size:11px; }
-#pnlTable tr:hover td{ background:rgba(21,48,78,.03); }
-#pnlTable tr:hover td:first-child{ background:rgba(21,48,78,.03); }
-#pnlTable td.num-cell{ font-family:'JetBrains Mono','Courier New',monospace; font-size:11px; }
-#pnlTable td.num-cell.neg{ color:var(--red-500); }
-#pnlTable td.col-latest{ background:rgba(232,163,61,.06); font-weight:600; }
-#pnlTable td.col-latest.neg{ color:var(--red-500); }
-#pnlTable td.col-avg{ background:rgba(91,112,134,.06); }
-#pnlTable td.col-ytd{ background:rgba(33,145,136,.04); }
-#pnlTable .mom-pill{ font-size:9.5px; font-weight:700; padding:1px 5px; border-radius:4px; display:inline-block; }
-#pnlTable .mom-pill.up{ background:var(--green-100); color:var(--green-600); }
-#pnlTable .mom-pill.dn{ background:var(--red-100); color:var(--red-600); }
-#pnlTable .mom-pill.nt{ background:var(--bg-alt); color:var(--ink-400); }
+#pnlTable tbody tr.section-bold td:first-child{ background:var(--bg-alt); color:var(--navy-800); }
+#pnlTable tbody tr.section-row td:first-child{ 
+  font-weight:700; color:var(--navy-800);
+}
 
 </style>
 </head>
@@ -459,9 +447,12 @@ th.cur-col{ color:var(--amber-600) !important; }
   <aside class="sidebar" id="sidebar">
     <div class="brand">
       <div class="brand-logo">
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <rect width="100" height="100" rx="16" fill="#E8143C"/>
-          <text x="50" y="72" text-anchor="middle" font-family="'Inter','Arial',sans-serif" font-weight="900" font-size="52" fill="white" letter-spacing="-2">deli</text>
+        <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+          <rect width="48" height="48" rx="10" fill="#E8143C"/>
+          <text x="24" y="34.5" text-anchor="middle"
+                font-family="'Arial Black','Arial',sans-serif"
+                font-weight="900" font-size="24" fill="white"
+                letter-spacing="-0.5">deli</text>
         </svg>
       </div>
       <div class="brand-text">
@@ -671,7 +662,7 @@ th.cur-col{ color:var(--amber-600) !important; }
       <div class="table-card">
         <div class="th-head">
           <h3 id="pnlTableTitle">Profit &amp; Loss Statement</h3>
-          <span class="ch-note" id="pnlTableNote">All months · Latest Actual · % Sales · MoM Var% · YTD · YTD % · Avg</span>
+          <span class="ch-note" id="pnlTableNote">All months · % Sales (latest) · MoM Var% · YTD Actual · Avg/Mo</span>
         </div>
         <div class="scroll-x"><table id="pnlTable"></table></div>
       </div>
@@ -1314,104 +1305,87 @@ function renderExpenseTable(){
    P&L STATEMENT TABLE
 ========================================================= */
 function renderPnlTable(){
-  // Latest month is always the last entry; it stays fixed in the "latest" columns
-  const latestIdx = DATA.length - 1;
-  const mL = DATA[latestIdx];                          // latest month (fixed highlight)
-  const mLPrev = latestIdx>0 ? DATA[latestIdx-1] : null; // SPLM of latest
-  const cL = CUM[latestIdx];                           // YTD through latest
+  // ── mirrors renderExpenseTable exactly in style/structure ──
+  const li  = DATA.length - 1;
+  const mL  = DATA[li];
+  const mLP = li > 0 ? DATA[li-1] : null;
+  const cL  = CUM[li];
 
-  document.getElementById('pnlTableTitle').textContent =
-    `Profit & Loss Statement — All Months`;
-
+  // Row definitions: [label, key, rowClass]
+  // rowClass: 'total-row' = bold total, 'sub' = indented, '' = normal, 'section-bold' = section total
   const rows = [
-    {label:'Net Sales',               key:'net_sales',        bold:true},
-    {label:'Total COGS',              key:'cogs'},
-    {label:'Gross Profit',            key:'gross_profit',     bold:true, section:true},
-    {label:'Total Marketing Expenses',key:'mkt_total'},
-    {label:'· Fixed',                 key:'mkt_fixed',        sub:true},
-    {label:'· Variable',              key:'mkt_variable',     sub:true},
-    {label:'· Promotion',             key:'mkt_promo',        sub:true},
-    {label:'Total Field Force Expenses',key:'ff_total'},
-    {label:'· Fixed',                 key:'ff_fixed',         sub:true},
-    {label:'· Variable',              key:'ff_variable',      sub:true},
-    {label:'Distribution Expenses',   key:'distribution'},
-    {label:'Administration Expenses', key:'admin'},
-    {label:'Total Operating Expenses',key:'opex_total',       bold:true, section:true},
-    {label:'Other Income',            key:'other_income'},
-    {label:'Operating Profit',        key:'operating_profit', bold:true, section:true},
-    {label:'Financing Cost',          key:'financing_cost'},
-    {label:'Profit Before WPPF & Tax',key:'pbt_wppf',         bold:true},
-    {label:'WPPF',                    key:'wppf'},
-    {label:'Profit Before Tax',       key:'pbt',              bold:true, section:true},
-    {label:'Tax',                     key:'tax'},
-    {label:'Profit After Tax',        key:'pat',              bold:true, section:true},
+    ['Net Sales',                 'net_sales',        'section-bold'],
+    ['Total COGS',                'cogs',             ''],
+    ['Gross Profit',              'gross_profit',     'section-bold'],
+    ['Total Marketing Expenses',  'mkt_total',        'total-row'],
+    ['· Fixed',                   'mkt_fixed',        'sub'],
+    ['· Variable',                'mkt_variable',     'sub'],
+    ['· Promotion',               'mkt_promo',        'sub'],
+    ['Total Field Force Expenses','ff_total',         'total-row'],
+    ['· Fixed',                   'ff_fixed',         'sub'],
+    ['· Variable',                'ff_variable',      'sub'],
+    ['Distribution Expenses',     'distribution',     ''],
+    ['Administration Expenses',   'admin',            ''],
+    ['Total Operating Expenses',  'opex_total',       'section-bold'],
+    ['Other Income',              'other_income',     ''],
+    ['Operating Profit',          'operating_profit', 'section-bold'],
+    ['Financing Cost',            'financing_cost',   ''],
+    ['Profit Before WPPF & Tax',  'pbt_wppf',         'total-row'],
+    ['WPPF',                      'wppf',             'sub'],
+    ['Profit Before Tax',         'pbt',              'section-bold'],
+    ['Tax',                       'tax',              'sub'],
+    ['Profit After Tax',          'pat',              'section-bold'],
   ];
 
-  // — helper: format num with neg class
-  function nc(v, dp=2, cls=''){
-    if(v===null||v===undefined) return '<td class="num-cell '+(cls||'')+' —">—</td>';
-    return `<td class="num-cell ${v<0?'neg':''} ${cls}">${fmt(v,dp)}</td>`;
-  }
-  function pctCell(v, ns, cls=''){
-    const r = safeDiv(v, ns);
-    if(r===null) return `<td class="num-cell ${cls}">—%</td>`;
-    return `<td class="num-cell ${r<0?'neg':''} ${cls}">${fmt(pct(r),1)}%</td>`;
-  }
-  function momCell(cur, prev){
-    if(prev===null||prev===undefined) return '<td class="num-cell">—</td>';
-    const g = growth(cur, prev);
-    if(g===null) return '<td class="num-cell">—</td>';
-    // invert "good" for cost lines: lower is good
-    const cls = g>=0 ? 'up' : 'dn';
-    return `<td class="num-cell"><span class="mom-pill ${cls}">${g>=0?'+':''}${fmt(g,1)}%</span></td>`;
-  }
-
-  // Build header: Particulars | all months... | Latest Actual | % Sales | MoM% | YTD | YTD% | Avg
-  let head = '<thead><tr><th>Particulars</th>';
-  DATA.forEach((d,i)=>{
-    const isLast = (i === latestIdx);
-    head += `<th class="col-month${isLast?' col-latest':''}">${d.month}</th>`;
+  // Header — same pattern as expense table
+  let head = `<thead><tr><th>Particulars</th>`;
+  MONTHS.forEach((m,i)=>{
+    const isLast = (i === li);
+    head += `<th class="${isLast?'cur-col':''}">${m}</th>`;
   });
-  head += `<th class="col-latest">% Sales</th>`;
-  head += `<th>MoM Var%</th>`;
-  head += `<th class="col-ytd">YTD Actual</th>`;
-  head += `<th class="col-ytd">YTD %</th>`;
-  head += `<th class="col-avg">Avg/Mo</th>`;
-  head += '</tr></thead>';
+  head += `<th class="cur-col">% Sales</th><th>MoM%</th><th class="col-ytd">YTD</th><th class="col-avg">Avg</th>`;
+  head += `</tr></thead>`;
 
   let body = '<tbody>';
-  rows.forEach(r=>{
-    const trCls = (r.bold?'total-row':'') + (r.sub?' sub':'') + (r.section?' section':'');
-    body += `<tr class="${trCls}"><td>${r.label}</td>`;
+  rows.forEach(([label, key, cls])=>{
+    const vals = DATA.map(d => d[key]);
+    const latestVal = vals[li];
+    const prevVal   = mLP ? mLP[key] : null;
+    const ytdVal    = cL[key];
+    const avg       = vals.reduce((a,b)=>a+b,0) / vals.length;
 
-    // All monthly actuals
-    DATA.forEach((d,i)=>{
-      const v = d[r.key];
-      const isLast = (i === latestIdx);
-      body += `<td class="num-cell ${v<0?'neg':''} ${isLast?'col-latest':''}">${fmt(v,2)}</td>`;
+    // MoM pill — same logic as expense table
+    const momG = (prevVal !== null && prevVal !== undefined) ? growth(latestVal, prevVal) : null;
+    const momHtml = momG === null
+      ? '—'
+      : `<span class="mini-pill ${momG>=0?'up':'down'}">${momG>=0?'+':''}${fmt(momG,1)}%</span>`;
+
+    // % of sales for latest month
+    const pctSales = safeDiv(latestVal, mL.net_sales);
+    const pctHtml  = pctSales === null ? '—%' : `${fmt(pct(pctSales),1)}%`;
+
+    body += `<tr class="${cls}">`;
+    body += `<td>${label}</td>`;
+
+    // Monthly columns
+    vals.forEach((v,i)=>{
+      const isLast = (i === li);
+      body += `<td class="num-cell${isLast?' cur-col':''}${v<0?' neg':''}">${fmt(v,2)}</td>`;
     });
 
-    // Latest % of Sales
-    body += pctCell(mL[r.key], mL.net_sales, 'col-latest');
+    // % Sales (latest, amber highlight)
+    body += `<td class="num-cell cur-col${pctSales!==null&&pctSales<0?' neg':''}">${pctHtml}</td>`;
+    // MoM%
+    body += `<td class="num-cell">${momHtml}</td>`;
+    // YTD
+    body += `<td class="num-cell col-ytd${ytdVal<0?' neg':''}">${fmt(ytdVal,2)}</td>`;
+    // Avg
+    body += `<td class="num-cell col-avg${avg<0?' neg':''}">${fmt(avg,2)}</td>`;
 
-    // MoM Var% (latest vs SPLM)
-    body += momCell(mL[r.key], mLPrev?mLPrev[r.key]:null);
-
-    // YTD Actual
-    const cval = cL[r.key];
-    body += `<td class="num-cell ${cval<0?'neg':''} col-ytd">${fmt(cval,2)}</td>`;
-
-    // YTD % of Sales
-    body += pctCell(cval, cL.net_sales, 'col-ytd');
-
-    // Avg per month
-    const avg = cval / DATA.length;
-    body += `<td class="num-cell ${avg<0?'neg':''} col-avg">${fmt(avg,2)}</td>`;
-
-    body += '</tr>';
+    body += `</tr>`;
   });
   body += '</tbody>';
-  document.getElementById('pnlTable').innerHTML = head+body;
+  document.getElementById('pnlTable').innerHTML = head + body;
 }
 
 /* =========================================================
