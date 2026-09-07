@@ -436,6 +436,46 @@ th.cur-col{ color:var(--amber-600) !important; }
   font-weight:700; color:var(--navy-800);
 }
 
+
+/* ── Collapsible Expense Table ─────────────────────────────────── */
+#expenseTable tr.group-header td {
+  font-weight: 700; color: var(--navy-800);
+  background: var(--bg-alt);
+  border-top: 1.5px solid var(--border);
+  cursor: pointer; user-select: none;
+}
+#expenseTable tr.group-header td:first-child::before {
+  content: '▾ ';
+  font-size: 10px;
+  color: var(--ink-400);
+  display: inline-block;
+  transition: transform .2s;
+  margin-right: 2px;
+}
+#expenseTable tr.group-header.collapsed td:first-child::before {
+  content: '▸ ';
+}
+#expenseTable tr.sub-item td { 
+  color: var(--ink-600);
+  transition: all 0.18s ease;
+}
+#expenseTable tr.sub-item td:first-child { 
+  padding-left: 26px; 
+  font-weight: 400;
+}
+#expenseTable tr.sub-item.hidden-row {
+  display: none;
+}
+#expenseTable tr.grand-total td {
+  font-weight: 700; color: var(--navy-900);
+  background: var(--navy-950, #0a1929);
+  color: #fff !important;
+  border-top: 2px solid var(--navy-700);
+}
+#expenseTable tr.grand-total td.num-cell { color: #fff !important; }
+#expenseTable tr.grand-total td.num-cell.neg { color: #ffaaaa !important; }
+.collapse-hint { font-size: 10px; color: var(--ink-400); font-style: italic; margin-left: 6px; font-weight: 400; }
+
 </style>
 </head>
 <body>
@@ -646,7 +686,7 @@ th.cur-col{ color:var(--amber-600) !important; }
         </div>
       </div>
 
-      <div class="section-head"><h2>Expense Line-Item Detail</h2><span class="sub">All 9 months, Mn Tk</span></div>
+      <div class="section-head"><h2>Expense Line-Item Detail</h2><span class="sub">All 10 months, Mn Tk</span></div>
       <div class="table-card">
         <div class="th-head"><h3>Category-wise Monthly Expense</h3><span class="ch-note">MoM% = latest vs prior month</span></div>
         <div class="scroll-x"><table id="expenseTable"></table></div>
@@ -1275,32 +1315,144 @@ function renderExpenseKpis(){
   document.getElementById('expKpiSub').textContent = DATA[selectedIdx].month;
 }
 function renderExpenseTable(){
-  const rows = [
-    ['Marketing – Fixed','mkt_fixed'], ['Marketing – Variable','mkt_variable'], ['Marketing Promotion','mkt_promo'],
-    ['Total Marketing','mkt_total'],
-    ['Field Force – Fixed','ff_fixed'], ['Field Force – Variable','ff_variable'],
-    ['Total Field Force','ff_total'],
-    ['Distribution','distribution'], ['Administration','admin'],
-    ['Total Operating Expense','opex_total'],
-  ];
-  let head = `<thead><tr><th>Category</th>${MONTHS.map(m=>`<th>${m}</th>`).join('')}<th>MoM%</th><th>Avg</th></tr></thead>`;
-  let body = '<tbody>';
-  rows.forEach(([label,key])=>{
-    const isTotal = key==='mkt_total'||key==='ff_total'||key==='opex_total';
-    const vals = DATA.map(d=>d[key]);
-    const avg = vals.reduce((a,b)=>a+b,0)/vals.length;
-    const mom = growth(vals[vals.length-1], vals[vals.length-2]);
-    body += `<tr class="${isTotal?'total-row':'sub'}">
-      <td>${label}</td>
-      ${vals.map((v,i)=>`<td class="num-cell${i===selectedIdx?' cur-col':''}">${fmt(v,2)}</td>`).join('')}
-      <td>${mom===null?'—':`<span class="mini-pill ${mom<0?'up':'down'}">${mom>=0?'+':''}${fmt(mom,1)}%</span>`}</td>
-      <td class="num-cell">${fmt(avg,2)}</td>
-    </tr>`;
-  });
-  body += '</tbody>';
-  document.getElementById('expenseTable').innerHTML = head+body;
-}
+  const li = DATA.length - 1; // latest idx for cur-col & MoM
 
+  // ── Sub-item data (hardcoded from "FF Fixed & Var Trend" and "MKT Fixed & Var Trend" sheets)
+  // Format: [label, [nov25,dec25,jan26,feb26,mar26,apr26,may26,jun26,jul26,aug26]]
+  const SUB = {
+    mkt_variable: [
+      ['Samples',             [0.060,0.064,0.105,0.010,0.039,0.987,0.052,0.032,0.110,0.031]],
+      ['Travelling & Conv.',  [0.000,0.036,0.004,0.009,-0.007,0.011,0.003,0.260,0.076,0.006]],
+      ['Annual Conference',   [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.108]],
+      ['Meeting Expenses',    [0.000,0.004,0.030,0.000,0.183,0.007,0.019,0.008,0.000,0.099]],
+      ['Recruitment Exp',     [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.016,0.000]],
+      ['Trade Margin Exp.',   [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+    ],
+    mkt_fixed: [
+      ['Salary & Wages',      [0.045,0.052,0.102,0.117,0.136,0.117,0.117,0.290,0.240,0.332]],
+      ['Casual Staff',        [0.049,0.049,0.056,0.061,0.126,0.092,0.123,0.104,0.000,0.000]],
+      ['Training',            [0.000,0.000,0.000,0.000,0.065,0.000,0.032,0.000,0.000,0.000]],
+      ['Entertainment',       [0.000,0.019,0.033,0.000,0.000,0.017,0.023,0.038,0.006,0.009]],
+      ['Staff Welfare & Med', [0.000,0.000,0.000,0.006,0.007,0.007,0.007,0.008,0.008,0.040]],
+      ['Fees, Rates & Taxes', [0.000,0.035,0.000,0.000,0.000,0.022,0.074,0.000,0.020,0.017]],
+      ['Post/Tel/Fax/E-Mail', [0.000,0.000,0.000,0.000,0.000,0.000,0.010,0.000,0.000,0.000]],
+      ['Depreciation',        [0.000,0.000,0.000,0.000,0.000,0.003,0.003,0.003,0.005,0.005]],
+      ['Bank Charges',        [0.000,0.000,0.000,0.002,0.001,0.004,0.004,0.003,0.003,0.002]],
+    ],
+    mkt_promo: [
+      ['Event & Activation',  [0.075,0.700,0.742,0.742,0.617,0.102,0.198,1.780,0.710,0.000]],
+      ['Free Goods',          [0.000,0.109,0.458,0.342,0.294,1.356,1.149,1.748,2.500,0.000]],
+      ['BP Global',           [0.000,0.008,0.000,0.000,0.000,0.000,0.008,0.066,0.000,0.000]],
+      ['Creative & Prod.',    [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.356,1.500,0.000]],
+      ['Print',               [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Digital',             [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+    ],
+    ff_variable: [
+      ['Sales Incentive',     [0.088,0.065,0.118,0.030,0.118,0.799,0.259,0.350,1.052,2.639]],
+      ['Travelling & Conv.',  [1.308,1.279,1.245,2.393,1.317,1.458,1.570,1.370,2.206,3.572]],
+      ['Meeting Expenses',    [0.000,0.000,0.000,0.000,0.008,0.004,0.002,0.877,0.001,0.027]],
+      ['Commission',          [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Donation & Gifts',    [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+    ],
+    ff_fixed: [
+      ['Salary & Wages',      [0.170,0.170,0.170,0.230,0.170,0.170,0.170,0.170,4.391,4.831]],
+      ['Casual Staff',        [2.479,3.032,3.043,3.240,4.534,3.244,4.694,3.818,0.000,0.000]],
+      ['Post/Tel/Fax/E-Mail', [0.000,0.050,0.038,0.032,0.031,0.040,0.032,0.049,0.035,0.057]],
+      ['Depreciation',        [0.000,0.000,0.000,0.000,0.000,0.010,0.010,0.010,0.007,0.008]],
+      ['Training',            [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.032,0.000,0.000]],
+      ['Entertainment',       [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+    ],
+    distribution: [
+      ['Central Dist. – Fixed',    [0.067,0.862,0.294,0.456,0.417,0.395,0.403,0.544,0.860,0.600]],
+      ['Central Dist. – Variable', [0.227,0.862,0.294,0.456,0.417,0.395,0.403,0.180,0.030,0.020]],
+      ['Loading & Unloading',      [0.024,0.862,0.294,0.456,0.417,0.395,0.403,0.000,0.000,0.000]],
+    ],
+  };
+
+  // ── Group definitions (summary rows that drive the existing DATA keys)
+  const GROUPS = [
+    { key:'mkt_variable',  label:'Marketing – Variable',   subKey:'mkt_variable' },
+    { key:'mkt_fixed',     label:'Marketing – Fixed',      subKey:'mkt_fixed' },
+    { key:'mkt_promo',     label:'Marketing – Promotion',  subKey:'mkt_promo' },
+    { key:'mkt_total',     label:'Total Marketing',        isTotal:true },
+    { key:'ff_variable',   label:'Field Force – Variable', subKey:'ff_variable' },
+    { key:'ff_fixed',      label:'Field Force – Fixed',    subKey:'ff_fixed' },
+    { key:'ff_total',      label:'Total Field Force',      isTotal:true },
+    { key:'distribution',  label:'Distribution',           subKey:'distribution' },
+    { key:'admin',         label:'Administration',         noSub:true },
+    { key:'opex_total',    label:'Total Operating Expense',isGrand:true },
+  ];
+
+  // Helper: sum of sub-items for a given month index (validation fallback)
+  function monthVals(key){ return DATA.map(d => d[key]); }
+
+  // ── Build header
+  let head = `<thead><tr>
+    <th>Category <span class="collapse-hint">click ▾ to expand</span></th>
+    ${MONTHS.map((m,i)=>`<th class="${i===li?'cur-col':''}">${m}</th>`).join('')}
+    <th class="cur-col">MoM%</th><th>Avg</th>
+  </tr></thead>`;
+
+  let body = '<tbody>';
+  let gid = 0;
+
+  GROUPS.forEach(g => {
+    const vals = monthVals(g.key);
+    const avg = vals.reduce((a,b)=>a+b,0)/vals.length;
+    const mom = growth(vals[li], vals[li-1]);
+    const momHtml = mom===null ? '—' : `<span class="mini-pill ${mom<0?'up':'down'}">${mom>=0?'+':''}${fmt(mom,1)}%</span>`;
+
+    const hasSub = g.subKey && SUB[g.subKey];
+    const rowCls = g.isGrand ? 'grand-total' : (g.isTotal ? 'total-row' : (hasSub ? 'group-header' : 'total-row'));
+    const gattr = hasSub ? ` data-group="g${gid}"` : '';
+
+    // ── Summary row
+    body += `<tr class="${rowCls}"${gattr}>`;
+    body += `<td>${g.label}</td>`;
+    vals.forEach((v,i) => {
+      body += `<td class="num-cell${i===li?' cur-col':''}${v<0?' neg':''}">${fmt(v,2)}</td>`;
+    });
+    body += `<td class="num-cell">${momHtml}</td>`;
+    body += `<td class="num-cell${avg<0?' neg':''}">${fmt(avg,2)}</td>`;
+    body += `</tr>`;
+
+    // ── Sub-item rows (collapsed by default)
+    if(hasSub){
+      const subs = SUB[g.subKey];
+      subs.forEach(([slabel, svals]) => {
+        // Ensure svals has enough entries (pad with 0 if needed)
+        while(svals.length < DATA.length) svals.push(0);
+        const savg = svals.slice(0,DATA.length).reduce((a,b)=>a+b,0)/DATA.length;
+        const smom = DATA.length>1 ? growth(svals[li], svals[li-1]) : null;
+        const smomHtml = smom===null ? '—' : `<span class="mini-pill ${smom<0?'up':'down'}">${smom>=0?'+':''}${fmt(smom,1)}%</span>`;
+        body += `<tr class="sub-item hidden-row" data-parent="g${gid}">`;
+        body += `<td>${slabel}</td>`;
+        svals.slice(0,DATA.length).forEach((v,i) => {
+          body += `<td class="num-cell${i===li?' cur-col':''}${v<0?' neg':''}">${fmt(Math.abs(v)<0.0005?0:v,2)}</td>`;
+        });
+        body += `<td class="num-cell">${smomHtml}</td>`;
+        body += `<td class="num-cell${savg<0?' neg':''}">${fmt(Math.abs(savg)<0.0005?0:savg,2)}</td>`;
+        body += `</tr>`;
+      });
+      gid++;
+    }
+  });
+
+  body += '</tbody>';
+  document.getElementById('expenseTable').innerHTML = head + body;
+
+  // ── Wire up collapse/expand toggle
+  document.querySelectorAll('#expenseTable tr.group-header').forEach(hdr => {
+    hdr.addEventListener('click', () => {
+      const grp = hdr.dataset.group;
+      const isCollapsed = hdr.classList.contains('collapsed');
+      document.querySelectorAll(`#expenseTable tr[data-parent="${grp}"]`).forEach(r => {
+        r.classList.toggle('hidden-row', !isCollapsed);
+      });
+      hdr.classList.toggle('collapsed', !isCollapsed);
+    });
+  });
+}
 /* =========================================================
    P&L STATEMENT TABLE
 ========================================================= */
