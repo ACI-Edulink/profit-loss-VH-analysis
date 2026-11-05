@@ -187,13 +187,12 @@ h1,h2,h3,.display{ font-family:'Space Grotesk',sans-serif; letter-spacing:-0.01e
   background: linear-gradient(180deg,#FFF5F5, #FFECEC);
   border:1px solid #F5B4B4; border-left:4px solid #D92B2B;
   border-radius:10px; padding:10px 16px; margin-top:10px;
-  display:flex; gap:10px; align-items:flex-start;
   font-size:12.8px; line-height:1.6; color:var(--ink-800,#3b2f2f);
 }
 .flag-note b{ color:#B3121C; font-weight:800; }
 .flag-note .tag{
   display:inline-block; font-size:9.5px; font-weight:800; letter-spacing:.05em; text-transform:uppercase;
-  color:#fff; background:#D92B2B; padding:2px 7px; border-radius:5px; margin-right:8px; vertical-align:1px; flex-shrink:0;
+  color:#fff; background:#D92B2B; padding:2px 7px; border-radius:5px; margin-right:8px; vertical-align:2px; white-space:nowrap;
 }
 
 /* Section headers */
@@ -360,6 +359,9 @@ th.cur-col{ color:var(--amber-600) !important; }
 
   .comment-banner{ padding:12px 14px; border-radius:10px; }
   .comment-banner .txt{ font-size:12.3px; }
+
+  .flag-note{ padding:10px 13px; border-radius:9px; font-size:12px; }
+  .flag-note .tag{ display:block; width:fit-content; margin-bottom:5px; }
 
   .table-card .th-head{ padding:12px 13px 10px; flex-wrap:wrap; gap:4px; }
   table{ font-size:11.3px; }
@@ -1089,7 +1091,7 @@ function setFlagNote(id, m){
   if(!el) return;
   if(m.month === 'Oct-26'){
     el.innerHTML = MKT_PROMO_ADJ_NOTE;
-    el.style.display = 'flex';
+    el.style.display = 'block';
   } else {
     el.style.display = 'none';
   }
