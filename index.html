@@ -165,6 +165,20 @@ h1,h2,h3,.display{ font-family:'Space Grotesk',sans-serif; letter-spacing:-0.01e
   color:var(--amber-600); background:var(--amber-100); padding:2px 7px; border-radius:5px; margin-right:8px; vertical-align:1px;
 }
 
+/* Flag note — adjustment call-out, standalone high-visibility strip */
+.flag-note{
+  background: linear-gradient(180deg,#FFF5F5, #FFECEC);
+  border:1px solid #F5B4B4; border-left:4px solid #D92B2B;
+  border-radius:10px; padding:10px 16px; margin-top:10px;
+  display:flex; gap:10px; align-items:flex-start;
+  font-size:12.8px; line-height:1.6; color:var(--ink-800,#3b2f2f);
+}
+.flag-note b{ color:#B3121C; font-weight:800; }
+.flag-note .tag{
+  display:inline-block; font-size:9.5px; font-weight:800; letter-spacing:.05em; text-transform:uppercase;
+  color:#fff; background:#D92B2B; padding:2px 7px; border-radius:5px; margin-right:8px; vertical-align:1px; flex-shrink:0;
+}
+
 /* Section headers */
 .section-head{ display:flex; align-items:baseline; justify-content:space-between; margin:26px 0 12px; }
 .section-head h2{ font-size:14.5px; font-weight:700; color:var(--ink-900); display:flex; align-items:center; gap:8px;}
@@ -586,7 +600,7 @@ th.cur-col{ color:var(--amber-600) !important; }
       </div>
     </nav>
     <div class="sidebar-foot">
-      <b>Period:</b> <span id='sidebarPeriod'>Nov'25 – Sept'26 (11 mo)</span><br>
+      <b>Period:</b> <span id='sidebarPeriod'>Nov'25 – Oct'26 (12 mo)</span><br>
       <b>Currency:</b> Million BDT (Tk)<br>
       <b>Basis:</b> vs SPLM (Same Period Last Month)
     </div>
@@ -656,6 +670,7 @@ th.cur-col{ color:var(--amber-600) !important; }
         <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 106 8c0 3.5 2 4.5 2 7h8c0-2.5 2-3.5 2-7z"/><path d="M9 21h6"/></svg></div>
         <div class="txt" id="overviewComment"></div>
       </div>
+      <div class="flag-note" id="overviewFlagNote" style="display:none;"></div>
 
       <div class="section-head"><h2>Headline KPIs — Actual vs SPLM</h2><span class="sub" id="ovKpiSub"></span></div>
       <div class="kpi-grid" id="kpiGrid"></div>
@@ -665,7 +680,7 @@ th.cur-col{ color:var(--amber-600) !important; }
         <div class="chart-wrap" style="height:290px;"><canvas id="waterfallChart"></canvas></div>
       </div>
 
-      <div class="section-head"><h2>Trends — 10 Month Rolling</h2><span class="sub">Nov'25 – Sept'26</span></div>
+      <div class="section-head"><h2>Trends — 11 Month Rolling</h2><span class="sub">Nov'25 – Oct'26</span></div>
       <div class="grid2">
         <div class="chart-card">
           <div class="ch-head"><h3>Net Sales Trend</h3><span class="ch-note">Mn Tk</span></div>
@@ -725,6 +740,7 @@ th.cur-col{ color:var(--amber-600) !important; }
         <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6 3"/></svg></div>
         <div class="txt" id="expenseComment"></div>
       </div>
+      <div class="flag-note" id="expenseFlagNote" style="display:none;"></div>
 
       <div class="section-head"><h2>Cost Structure Snapshot</h2><span class="sub" id="expKpiSub"></span></div>
       <div class="kpi-grid" id="expKpiGrid"></div>
@@ -751,7 +767,7 @@ th.cur-col{ color:var(--amber-600) !important; }
         </div>
       </div>
 
-      <div class="section-head"><h2>Expense Line-Item Detail</h2><span class="sub">All 11 months, Mn Tk</span></div>
+      <div class="section-head"><h2>Expense Line-Item Detail</h2><span class="sub">All 12 months, Mn Tk</span></div>
       <div class="table-card">
         <div class="th-head"><h3>Category-wise Monthly Expense</h3><span class="ch-note">MoM% = latest vs prior month</span></div>
         <div class="scroll-x"><table id="expenseTable"></table></div>
@@ -790,7 +806,7 @@ th.cur-col{ color:var(--amber-600) !important; }
 </div>
 
 <script id="pnl-data" type="application/json">
-[{"net_sales": 26.552487, "cogs": 18.15, "gross_profit": 8.402487, "mkt_total": 0.229025, "mkt_fixed": 0.094, "mkt_variable": 0.060025, "mkt_promo": 0.075, "ff_total": 4.045473, "ff_fixed": 2.64898, "ff_variable": 1.396493, "distribution": 0.318172, "admin": 0.0, "opex_total": 4.59267, "other_income": 0.0, "operating_profit": 3.809818, "financing_cost": 0.4, "pbt_wppf": 3.409818, "wppf": 0.170491, "pbt": 3.239327, "tax": 0.745045, "pat": 2.494282, "month": "Nov-25"}, {"net_sales": 11.510293, "cogs": 7.69, "gross_profit": 3.820293, "mkt_total": 1.075479, "mkt_fixed": 0.154207, "mkt_variable": 0.103849, "mkt_promo": 0.817424, "ff_total": 4.595503, "ff_fixed": 3.251573, "ff_variable": 1.34393, "distribution": 0.995165, "admin": 0.0, "opex_total": 6.666147, "other_income": 0.0, "operating_profit": -2.845855, "financing_cost": 0.61, "pbt_wppf": -3.455855, "wppf": -0.172793, "pbt": -3.283062, "tax": -0.755104, "pat": -2.527958, "month": "Dec-25"}, {"net_sales": 27.53789, "cogs": 19.02, "gross_profit": 8.51789, "mkt_total": 1.529426, "mkt_fixed": 0.190235, "mkt_variable": 0.139173, "mkt_promo": 1.200019, "ff_total": 4.614113, "ff_fixed": 3.250663, "ff_variable": 1.36345, "distribution": 0.483471, "admin": 0.0, "opex_total": 6.62701, "other_income": 0.0, "operating_profit": 1.89088, "financing_cost": 0.72, "pbt_wppf": 1.17088, "wppf": 0.058544, "pbt": 1.112336, "tax": 0.255837, "pat": 0.856499, "month": "Jan-26"}, {"net_sales": 15.931034, "cogs": 10.48, "gross_profit": 5.451034, "mkt_total": 1.288631, "mkt_fixed": 0.186141, "mkt_variable": 0.01868, "mkt_promo": 1.08381, "ff_total": 5.925033, "ff_fixed": 3.502064, "ff_variable": 2.422969, "distribution": 0.680245, "admin": 0.0, "opex_total": 7.893909, "other_income": 0.0, "operating_profit": -2.442875, "financing_cost": 0.85, "pbt_wppf": -3.292875, "wppf": -0.164644, "pbt": -3.128232, "tax": -0.719493, "pat": -2.408738, "month": "Feb-26"}, {"net_sales": 13.209064, "cogs": 8.22, "gross_profit": 4.989064, "mkt_total": 1.459558, "mkt_fixed": 0.333257, "mkt_variable": 0.214639, "mkt_promo": 0.911663, "ff_total": 6.177902, "ff_fixed": 4.735073, "ff_variable": 1.442829, "distribution": 0.595267, "admin": 0.0, "opex_total": 8.232727, "other_income": 0.0, "operating_profit": -3.243663, "financing_cost": 0.89, "pbt_wppf": -4.133663, "wppf": -0.206683, "pbt": -3.92698, "tax": -0.903205, "pat": -3.023775, "month": "Mar-26"}, {"net_sales": 39.208178, "cogs": 26.0, "gross_profit": 13.208178, "mkt_total": 2.724927, "mkt_fixed": 0.262174, "mkt_variable": 1.005035, "mkt_promo": 1.457718, "ff_total": 5.724218, "ff_fixed": 3.463595, "ff_variable": 2.260623, "distribution": 0.704763, "admin": 0.0, "opex_total": 9.153908, "other_income": 0.0, "operating_profit": 4.05427, "financing_cost": 0.69, "pbt_wppf": 3.36427, "wppf": 0.168213, "pbt": 3.196056, "tax": 0.735093, "pat": 2.460963, "month": "Apr-26"}, {"net_sales": 19.822601, "cogs": 13.43, "gross_profit": 6.392601, "mkt_total": 1.837849, "mkt_fixed": 0.408623, "mkt_variable": 0.074103, "mkt_promo": 1.355123, "ff_total": 6.73741, "ff_fixed": 4.905643, "ff_variable": 1.831767, "distribution": 0.675553, "admin": 0.0, "opex_total": 9.250812, "other_income": 0.25, "operating_profit": -2.608211, "financing_cost": 0.87, "pbt_wppf": -3.478211, "wppf": -0.173911, "pbt": -3.304301, "tax": -0.759989, "pat": -2.544311, "month": "May-26"}, {"net_sales": 30.345735, "cogs": 20.92, "gross_profit": 9.425735, "mkt_total": 4.715092, "mkt_fixed": 0.464486, "mkt_variable": 0.300606, "mkt_promo": 3.95, "ff_total": 6.676309, "ff_fixed": 4.079191, "ff_variable": 2.597118, "distribution": 0.724351, "admin": 0.0, "opex_total": 12.115752, "other_income": 0.11, "operating_profit": -2.580017, "financing_cost": 0.58, "pbt_wppf": -3.160017, "wppf": -0.158001, "pbt": -3.002016, "tax": -0.690464, "pat": -2.311553, "month": "Jun-26"}, {"net_sales": 40.67, "cogs": 27.66, "gross_profit": 13.01, "mkt_total": 5.554, "mkt_fixed": 0.282, "mkt_variable": 0.202, "mkt_promo": 5.07, "ff_total": 7.692, "ff_fixed": 4.433, "ff_variable": 3.259, "distribution": 0.89, "admin": 0.0, "opex_total": 14.136, "other_income": 0.0, "operating_profit": -1.126, "financing_cost": 1.14, "pbt_wppf": -2.266, "wppf": -0.1133, "pbt": -2.1527, "tax": -0.495121, "pat": -1.657579, "month": "Jul-26"}, {"net_sales": 33.81, "cogs": 24.66, "gross_profit": 9.15, "mkt_total": 6.219, "mkt_fixed": 0.405, "mkt_variable": 0.244, "mkt_promo": 5.57, "ff_total": 8.006, "ff_fixed": 4.896, "ff_variable": 3.11, "distribution": 0.62, "admin": 0.0, "opex_total": 14.845, "other_income": 0.0, "operating_profit": -5.695, "financing_cost": 1.13, "pbt_wppf": -6.825, "wppf": -0.34125, "pbt": -6.48375, "tax": -1.4912625, "pat": -4.9924875, "month": "Aug-26"}, {"net_sales": 29.35, "cogs": 20.46, "gross_profit": 8.89, "mkt_total": 6.419, "mkt_fixed": 0.551, "mkt_variable": 1.108, "mkt_promo": 4.76, "ff_total": 7.527, "ff_fixed": 4.747, "ff_variable": 2.78, "distribution": 0.61, "admin": 0.0, "opex_total": 14.556, "other_income": 0.0, "operating_profit": -5.666, "financing_cost": 1.35, "pbt_wppf": -7.016, "wppf": -0.3508, "pbt": -6.6652, "tax": -1.532996, "pat": -5.132204, "month": "Sept-26"}]
+[{"net_sales": 26.552487, "cogs": 18.15, "gross_profit": 8.402487, "mkt_total": 0.229025, "mkt_fixed": 0.094, "mkt_variable": 0.060025, "mkt_promo": 0.075, "ff_total": 4.045473, "ff_fixed": 2.64898, "ff_variable": 1.396493, "distribution": 0.318172, "admin": 0.0, "opex_total": 4.59267, "other_income": 0.0, "operating_profit": 3.809818, "financing_cost": 0.4, "pbt_wppf": 3.409818, "wppf": 0.170491, "pbt": 3.239327, "tax": 0.745045, "pat": 2.494282, "month": "Nov-25"}, {"net_sales": 11.510293, "cogs": 7.69, "gross_profit": 3.820293, "mkt_total": 1.075479, "mkt_fixed": 0.154207, "mkt_variable": 0.103849, "mkt_promo": 0.817424, "ff_total": 4.595503, "ff_fixed": 3.251573, "ff_variable": 1.34393, "distribution": 0.995165, "admin": 0.0, "opex_total": 6.666147, "other_income": 0.0, "operating_profit": -2.845855, "financing_cost": 0.61, "pbt_wppf": -3.455855, "wppf": -0.172793, "pbt": -3.283062, "tax": -0.755104, "pat": -2.527958, "month": "Dec-25"}, {"net_sales": 27.53789, "cogs": 19.02, "gross_profit": 8.51789, "mkt_total": 1.529426, "mkt_fixed": 0.190235, "mkt_variable": 0.139173, "mkt_promo": 1.200019, "ff_total": 4.614113, "ff_fixed": 3.250663, "ff_variable": 1.36345, "distribution": 0.483471, "admin": 0.0, "opex_total": 6.62701, "other_income": 0.0, "operating_profit": 1.89088, "financing_cost": 0.72, "pbt_wppf": 1.17088, "wppf": 0.058544, "pbt": 1.112336, "tax": 0.255837, "pat": 0.856499, "month": "Jan-26"}, {"net_sales": 15.931034, "cogs": 10.48, "gross_profit": 5.451034, "mkt_total": 1.288631, "mkt_fixed": 0.186141, "mkt_variable": 0.01868, "mkt_promo": 1.08381, "ff_total": 5.925033, "ff_fixed": 3.502064, "ff_variable": 2.422969, "distribution": 0.680245, "admin": 0.0, "opex_total": 7.893909, "other_income": 0.0, "operating_profit": -2.442875, "financing_cost": 0.85, "pbt_wppf": -3.292875, "wppf": -0.164644, "pbt": -3.128232, "tax": -0.719493, "pat": -2.408738, "month": "Feb-26"}, {"net_sales": 13.209064, "cogs": 8.22, "gross_profit": 4.989064, "mkt_total": 1.459558, "mkt_fixed": 0.333257, "mkt_variable": 0.214639, "mkt_promo": 0.911663, "ff_total": 6.177902, "ff_fixed": 4.735073, "ff_variable": 1.442829, "distribution": 0.595267, "admin": 0.0, "opex_total": 8.232727, "other_income": 0.0, "operating_profit": -3.243663, "financing_cost": 0.89, "pbt_wppf": -4.133663, "wppf": -0.206683, "pbt": -3.92698, "tax": -0.903205, "pat": -3.023775, "month": "Mar-26"}, {"net_sales": 39.208178, "cogs": 26.0, "gross_profit": 13.208178, "mkt_total": 2.724927, "mkt_fixed": 0.262174, "mkt_variable": 1.005035, "mkt_promo": 1.457718, "ff_total": 5.724218, "ff_fixed": 3.463595, "ff_variable": 2.260623, "distribution": 0.704763, "admin": 0.0, "opex_total": 9.153908, "other_income": 0.0, "operating_profit": 4.05427, "financing_cost": 0.69, "pbt_wppf": 3.36427, "wppf": 0.168213, "pbt": 3.196056, "tax": 0.735093, "pat": 2.460963, "month": "Apr-26"}, {"net_sales": 19.822601, "cogs": 13.43, "gross_profit": 6.392601, "mkt_total": 1.837849, "mkt_fixed": 0.408623, "mkt_variable": 0.074103, "mkt_promo": 1.355123, "ff_total": 6.73741, "ff_fixed": 4.905643, "ff_variable": 1.831767, "distribution": 0.675553, "admin": 0.0, "opex_total": 9.250812, "other_income": 0.25, "operating_profit": -2.608211, "financing_cost": 0.87, "pbt_wppf": -3.478211, "wppf": -0.173911, "pbt": -3.304301, "tax": -0.759989, "pat": -2.544311, "month": "May-26"}, {"net_sales": 30.345735, "cogs": 20.92, "gross_profit": 9.425735, "mkt_total": 4.715092, "mkt_fixed": 0.464486, "mkt_variable": 0.300606, "mkt_promo": 3.95, "ff_total": 6.676309, "ff_fixed": 4.079191, "ff_variable": 2.597118, "distribution": 0.724351, "admin": 0.0, "opex_total": 12.115752, "other_income": 0.11, "operating_profit": -2.580017, "financing_cost": 0.58, "pbt_wppf": -3.160017, "wppf": -0.158001, "pbt": -3.002016, "tax": -0.690464, "pat": -2.311553, "month": "Jun-26"}, {"net_sales": 40.67, "cogs": 27.66, "gross_profit": 13.01, "mkt_total": 5.554, "mkt_fixed": 0.282, "mkt_variable": 0.202, "mkt_promo": 5.07, "ff_total": 7.692, "ff_fixed": 4.433, "ff_variable": 3.259, "distribution": 0.89, "admin": 0.0, "opex_total": 14.136, "other_income": 0.0, "operating_profit": -1.126, "financing_cost": 1.14, "pbt_wppf": -2.266, "wppf": -0.1133, "pbt": -2.1527, "tax": -0.495121, "pat": -1.657579, "month": "Jul-26"}, {"net_sales": 33.81, "cogs": 24.66, "gross_profit": 9.15, "mkt_total": 6.219, "mkt_fixed": 0.405, "mkt_variable": 0.244, "mkt_promo": 5.57, "ff_total": 8.006, "ff_fixed": 4.896, "ff_variable": 3.11, "distribution": 0.62, "admin": 0.0, "opex_total": 14.845, "other_income": 0.0, "operating_profit": -5.695, "financing_cost": 1.13, "pbt_wppf": -6.825, "wppf": -0.34125, "pbt": -6.48375, "tax": -1.4912625, "pat": -4.9924875, "month": "Aug-26"}, {"net_sales": 29.35, "cogs": 20.46, "gross_profit": 8.89, "mkt_total": 6.419, "mkt_fixed": 0.551, "mkt_variable": 1.108, "mkt_promo": 4.76, "ff_total": 7.527, "ff_fixed": 4.747, "ff_variable": 2.78, "distribution": 0.61, "admin": 0.0, "opex_total": 14.556, "other_income": 0.0, "operating_profit": -5.666, "financing_cost": 1.35, "pbt_wppf": -7.016, "wppf": -0.3508, "pbt": -6.6652, "tax": -1.532996, "pat": -5.132204, "month": "Sept-26"}, {"net_sales": 32.66, "cogs": 24.48, "gross_profit": 8.18, "mkt_total": 2.1, "mkt_fixed": 0.487, "mkt_variable": 0.053, "mkt_promo": 1.56, "ff_total": 8.076, "ff_fixed": 5.169, "ff_variable": 2.907, "distribution": 0.56, "admin": 1.0, "opex_total": 11.736, "other_income": 0.0, "operating_profit": -3.556, "financing_cost": 1.48, "pbt_wppf": -5.036, "wppf": -0.2518, "pbt": -4.7842, "tax": -1.100366, "pat": -3.683834, "month": "Oct-26"}]
 </script>
 
 <script>
@@ -1050,6 +1066,17 @@ function biggestCategory(m){
   cats.sort((a,b)=>b[1]-a[1]);
   return cats[0];
 }
+const MKT_PROMO_ADJ_NOTE = `<span class="tag">Note</span>Oct'26 Marketing Promotion cost reflects an adjustment: <b>DB Incentive (Tk 2.0 Lakh / 0.20 Mn)</b> + <b>Trade Promo (Tk 21.98 Lakh / 2.198 Mn)</b> were adjusted down by approx. <b>Tk 1.0 Mn</b>, so the booked Marketing Promotion for the month nets to <b>~Tk 1.5 Mn (15 Lakh)</b>.`;
+function setFlagNote(id, m){
+  const el = document.getElementById(id);
+  if(!el) return;
+  if(m.month === 'Oct-26'){
+    el.innerHTML = MKT_PROMO_ADJ_NOTE;
+    el.style.display = 'flex';
+  } else {
+    el.style.display = 'none';
+  }
+}
 function renderOverviewComment(){
   const m = DATA[selectedIdx];
   const p = selectedIdx>0 ? DATA[selectedIdx-1] : null;
@@ -1061,6 +1088,7 @@ function renderOverviewComment(){
     `Gross Margin stood at <b>${fmt(pct(m.gp_pct),1)}%</b>${m.gp_pct_pp!==null?` (${m.gp_pct_pp>=0?'+':''}${fmt(m.gp_pct_pp,1)} pp vs SPLM)`:''}. `+
     `Operating Expenses were <b>${fmt(m.opex_total,2)} Mn Tk</b> (${fmt(pct(m.opex_pct),1)}% of sales), led by <b>${big[0]}</b> at ${fmt(big[1],2)} Mn Tk. `+
     `The month closed with ${pbtState} before tax.`;
+  setFlagNote('overviewFlagNote', m);
 }
 function renderYtdComment(){
   const c = CUM[selectedIdx];
@@ -1074,6 +1102,7 @@ function renderExpenseComment(){
   document.getElementById('expenseComment').innerHTML =
     `<span class="tag">${m.month}</span>Of total Marketing spend, <b>${fmt(mktFixShare,0)}%</b> is fixed and <b>${fmt(100-mktFixShare,0)}%</b> variable; Field Force spend is <b>${fmt(ffFixShare,0)}%</b> fixed. `+
     `Field Force remains the largest single cost pool at <b>${fmt(m.ff_total,2)} Mn Tk</b> (${fmt(pct(m.ff_pct),1)}% of sales), followed by Marketing at <b>${fmt(m.mkt_total,2)} Mn Tk</b> (${fmt(pct(m.mkt_pct),1)}% of sales).`;
+  setFlagNote('expenseFlagNote', m);
 }
 function renderPnlComment(){
   // Banner always shows the LATEST month (last in DATA), regardless of selectedIdx
@@ -1243,7 +1272,14 @@ function renderMktFixVar(){
       {label:'Promotion', data:DATA.map(d=>d.mkt_promo), backgroundColor:COL.teal, stack:'m', dataLabels:{anchor:'center', color:'#fff', formatter:(v)=>fmt(v,1)}},
     ]},
     options:{ responsive:true, maintainAspectRatio:false, layout:{padding:{top:14}},
-      plugins:{legend:{display:true, position:'top', align:'end', labels:{boxWidth:9,boxHeight:9,usePointStyle:true,pointStyle:'rect', font:{size:10.5}}}, dataLabels:{display:true}},
+      plugins:{legend:{display:true, position:'top', align:'end', labels:{boxWidth:9,boxHeight:9,usePointStyle:true,pointStyle:'rect', font:{size:10.5}}}, dataLabels:{display:true},
+        tooltip:{ callbacks:{ afterBody:(items)=>{
+          const lbl = items && items[0] ? items[0].label : null;
+          if(lbl === 'Oct-26'){
+            return ['', '⚠ Adjustment note:', 'DB Incentive (0.20 Mn) + Trade Promo (2.198 Mn)', 'adjusted down by ~1.0 Mn Tk', '→ net Mkt Promotion booked: ~1.5 Mn Tk (15 Lakh)'];
+          }
+          return [];
+        } } } },
       scales:{ x:{stacked:true, grid:{display:false}}, y:{stacked:true, ...baseGrid()} } }
   });
 }
@@ -1386,89 +1422,89 @@ function renderExpenseTable(){
   // Format: [label, [nov25,dec25,jan26,feb26,mar26,apr26,may26,jun26,jul26,aug26]]
   const SUB = {
     mkt_variable: [
-      ['Samples',                  [0.060,0.064,0.105,0.010,0.039,0.987,0.052,0.032,0.110,0.031,0.111]],
-      ['Trade Margin Exp.',        [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Travelling & Conveyance',  [0.000,0.036,0.004,0.009,-0.007,0.011,0.003,0.260,0.076,0.006,0.001]],
-      ['Annual Conference',        [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.108,0.000]],
-      ['Meeting Expenses',         [0.000,0.004,0.030,0.000,0.183,0.007,0.019,0.008,0.000,0.099,0.996]],
-      ['Recruitment Exp',          [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.016,0.000,0.000]],
-      ['Annual Conference (HP)',   [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['IT Enabled Services',      [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.108,0.000]],
-      ['Mkt Incentive awards',     [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Samples',                  [0.060,0.064,0.105,0.010,0.039,0.987,0.052,0.032,0.110,0.031,0.111,0.047]],
+      ['Trade Margin Exp.',        [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Travelling & Conveyance',  [0.000,0.036,0.004,0.009,-0.007,0.011,0.003,0.260,0.076,0.006,0.001,0.000]],
+      ['Annual Conference',        [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.108,0.000,0.000]],
+      ['Meeting Expenses',         [0.000,0.004,0.030,0.000,0.183,0.007,0.019,0.008,0.000,0.099,0.996,0.000]],
+      ['Recruitment Exp',          [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.016,0.000,0.000,0.000]],
+      ['Annual Conference (HP)',   [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['IT Enabled Services',      [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.108,0.000,0.006]],
+      ['Mkt Incentive awards',     [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
     ],
     mkt_fixed: [
-      ['Salary & Wages',           [0.045,0.052,0.102,0.117,0.136,0.117,0.117,0.290,0.240,0.332,0.339]],
-      ['Casual Staff',             [0.049,0.049,0.056,0.061,0.126,0.092,0.122,0.104,0.000,0.000,0.000]],
-      ['Staff Overtime',           [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Training',                 [0.000,0.000,0.000,0.000,0.065,0.000,0.032,0.000,0.000,0.000,0.003]],
-      ['Printed Stationery',       [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Office Stationery',        [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Plant/Building Mntnc',     [0.000,0.000,0.000,0.000,0.000,0.000,0.001,0.000,0.000,0.000,0.004]],
-      ['Mntnc-Mach/Equip/Othr',    [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Vehicle - Maintenance',    [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Vehicle -Running',         [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Entertainment',            [0.000,0.019,0.033,0.000,0.000,0.017,0.023,0.038,0.006,0.009,0.000]],
-      ['Legal & Profe Charges',    [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Product Development Exp.', [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Staff Welfare & Medical',  [0.000,0.000,0.000,0.006,0.007,0.007,0.007,0.008,0.008,0.040,0.051]],
-      ['Insurance',                [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Bank Charges',             [0.000,0.000,0.000,0.002,0.001,0.004,0.004,0.003,0.003,0.002,0.002]],
-      ['Depreciation',             [0.000,0.000,0.000,0.000,0.000,0.003,0.003,0.003,0.005,0.005,0.010]],
-      ['Stock write off exp.',     [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Bad Debt',                 [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Sales Service Charges',    [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Contracted Research',      [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Electricity & Gas',        [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.115]],
-      ['Post\Tel\Fax\E-Mail',      [0.000,0.000,0.000,0.000,0.000,0.000,0.010,0.000,0.000,0.000,0.000]],
-      ['Office Rent',              [0.000,0.000,0.000,0.000,0.000,0.000,0.015,0.019,0.000,0.000,0.000]],
-      ['Fees, Rates & Taxes',      [0.000,0.035,0.000,0.000,0.000,0.022,0.074,0.000,0.020,0.017,0.027]],
+      ['Salary & Wages',           [0.045,0.052,0.102,0.117,0.136,0.117,0.117,0.290,0.240,0.332,0.339,0.307]],
+      ['Casual Staff',             [0.049,0.049,0.056,0.061,0.126,0.092,0.122,0.104,0.000,0.000,0.000,0.000]],
+      ['Staff Overtime',           [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Training',                 [0.000,0.000,0.000,0.000,0.065,0.000,0.032,0.000,0.000,0.000,0.003,0.000]],
+      ['Printed Stationery',       [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Office Stationery',        [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Plant/Building Mntnc',     [0.000,0.000,0.000,0.000,0.000,0.000,0.001,0.000,0.000,0.000,0.004,0.019]],
+      ['Mntnc-Mach/Equip/Othr',    [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.004]],
+      ['Vehicle - Maintenance',    [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.011]],
+      ['Vehicle -Running',         [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Entertainment',            [0.000,0.019,0.033,0.000,0.000,0.017,0.023,0.038,0.006,0.009,0.000,0.004]],
+      ['Legal & Profe Charges',    [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Product Development Exp.', [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Staff Welfare & Medical',  [0.000,0.000,0.000,0.006,0.007,0.007,0.007,0.008,0.008,0.040,0.051,0.050]],
+      ['Insurance',                [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Bank Charges',             [0.000,0.000,0.000,0.002,0.001,0.004,0.004,0.003,0.003,0.002,0.002,0.001]],
+      ['Depreciation',             [0.000,0.000,0.000,0.000,0.000,0.003,0.003,0.003,0.005,0.005,0.010,0.010]],
+      ['Stock write off exp.',     [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Bad Debt',                 [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Sales Service Charges',    [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Contracted Research',      [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Electricity & Gas',        [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.115,0.039]],
+      ['Post\Tel\Fax\E-Mail',      [0.000,0.000,0.000,0.000,0.000,0.000,0.010,0.000,0.000,0.000,0.000,0.000]],
+      ['Office Rent',              [0.000,0.000,0.000,0.000,0.000,0.000,0.020,0.019,0.000,0.000,0.000,0.000]],
+      ['Fees, Rates & Taxes',      [0.000,0.035,0.000,0.000,0.000,0.022,0.074,0.000,0.020,0.017,0.027,0.042]],
     ],
     mkt_promo: [
-      ['Print',                    [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.356,1.500,0.000,0.558]],
-      ['Electronic',               [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Outdoor',                  [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Digital',                  [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['BP Global',                [0.000,0.008,0.000,0.000,0.000,0.000,0.008,0.066,0.000,0.000,0.000]],
-      ['Event & Activation',       [0.075,0.700,0.742,0.742,0.617,0.102,0.198,1.780,0.710,0.624,0.000]],
-      ['Consumer Promo',           [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Trade Promo',              [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Creative & Prod. Charges', [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Tele Marketing',           [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Free Goods',               [0.000,0.109,0.458,0.342,0.294,1.356,1.149,1.748,2.500,3.032,3.169]],
-      ['Gondola Rent',             [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Publicity & Advertisement',[0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.664]],
+      ['Print',                    [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.356,1.500,0.000,0.558,0.000]],
+      ['Electronic',               [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Outdoor',                  [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Digital',                  [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['BP Global',                [0.000,0.008,0.000,0.000,0.000,0.000,0.008,0.066,0.000,0.000,0.000,0.000]],
+      ['Event & Activation',       [0.075,0.700,0.742,0.742,0.617,0.102,0.198,1.780,0.710,0.624,0.000,0.000]],
+      ['Consumer Promo',           [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Trade Promo',              [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Creative & Prod. Charges', [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Tele Marketing',           [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Free Goods',               [0.000,0.109,0.458,0.342,0.294,1.356,1.149,1.748,2.500,3.032,3.169,2.198]],
+      ['Gondola Rent',             [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Publicity & Advertisement',[0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.620,0.000]],
     ],
     ff_variable: [
-      ['Sales Incentive Awards',   [0.088,0.065,0.118,0.029,0.118,0.798,0.259,0.350,1.052,1.226,0.413]],
-      ['Commission',               [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Export Expenses',          [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Travelling & Conveyance',  [1.308,1.279,1.245,2.393,1.317,1.458,1.570,1.370,2.206,1.857,2.367]],
-      ['Meeting Expenses',         [0.000,0.000,0.000,0.000,0.008,0.004,0.002,0.877,0.001,0.027,0.000]],
-      ['Donation & Gifts',         [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Sales Incentive Awards',   [0.088,0.065,0.118,0.029,0.118,0.798,0.259,0.350,1.052,1.226,0.700,0.630]],
+      ['Commission',               [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Export Expenses',          [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Travelling & Conveyance',  [1.308,1.279,1.245,2.393,1.317,1.458,1.570,1.370,2.206,1.857,2.367,2.277]],
+      ['Meeting Expenses',         [0.000,0.000,0.000,0.000,0.008,0.004,0.002,0.877,0.001,0.027,0.000,0.000]],
+      ['Donation & Gifts',         [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
     ],
     ff_fixed: [
-      ['Salary & Wages',           [0.170,0.170,0.170,0.230,0.170,0.170,0.170,0.170,4.391,4.831,4.692]],
-      ['Staff Overtime',           [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Casual Staff',             [2.479,3.032,3.043,3.240,4.534,3.244,4.694,3.818,0.000,0.000,0.000]],
-      ['Training',                 [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.032,0.000,0.000,0.000]],
-      ['Printed Stationery',       [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Office Stationery',        [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Plant/Building Mntnc',     [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Mntnc-Mach/Equip/Othr',    [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Vehicle - Maintenance',    [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Vehicle -Running',         [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Entertainment',            [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Staff Welfare & Medical',  [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Insurance',                [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Depreciation',             [0.000,0.000,0.000,0.000,0.000,0.010,0.010,0.010,0.007,0.008,0.007]],
-      ['Electricity & Gas',        [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
-      ['Post\Tel\Fax\E-Mail',      [0.000,0.050,0.038,0.032,0.031,0.040,0.032,0.049,0.035,0.057,0.048]],
-      ['Rent, Rates & Taxes',      [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Salary & Wages',           [0.170,0.170,0.170,0.230,0.170,0.170,0.170,0.170,4.391,4.831,4.692,5.118]],
+      ['Staff Overtime',           [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Casual Staff',             [2.479,3.032,3.043,3.240,4.534,3.244,4.694,3.818,0.000,0.000,0.000,0.000]],
+      ['Training',                 [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.032,0.000,0.000,0.000,0.000]],
+      ['Printed Stationery',       [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Office Stationery',        [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Plant/Building Mntnc',     [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Mntnc-Mach/Equip/Othr',    [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Vehicle - Maintenance',    [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Vehicle -Running',         [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Entertainment',            [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Staff Welfare & Medical',  [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Insurance',                [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Depreciation',             [0.000,0.000,0.000,0.000,0.000,0.010,0.010,0.010,0.007,0.008,0.007,0.008]],
+      ['Electricity & Gas',        [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
+      ['Post\Tel\Fax\E-Mail',      [0.000,0.050,0.038,0.032,0.031,0.040,0.032,0.049,0.035,0.057,0.048,0.043]],
+      ['Rent, Rates & Taxes',      [0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000,0.000]],
     ],
     distribution: [
-      ['Central Dist. – Fixed',    [0.067,0.862,0.294,0.456,0.417,0.395,0.403,0.544,0.860,0.600,0.600]],
-      ['Central Dist. – Variable', [0.227,0.862,0.294,0.456,0.417,0.395,0.403,0.180,0.030,0.020,0.010]],
-      ['Loading & Unloading',      [0.024,0.862,0.294,0.456,0.417,0.395,0.403,0.000,0.000,0.000,0.000]],
+      ['Central Dist. – Fixed',    [0.067,0.862,0.294,0.456,0.417,0.395,0.403,0.544,0.860,0.600,0.600,0.560]],
+      ['Central Dist. – Variable', [0.227,0.862,0.294,0.456,0.417,0.395,0.403,0.180,0.030,0.020,0.010,0.000]],
+      ['Loading & Unloading',      [0.024,0.862,0.294,0.456,0.417,0.395,0.403,0.000,0.000,0.000,0.000,0.000]],
     ],
   };
 
